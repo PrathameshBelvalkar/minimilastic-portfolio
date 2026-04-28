@@ -35,6 +35,7 @@ export function AboutProfileSection() {
                 </a>
               </div>
               <div className="flex flex-col gap-1">
+                <p className="font-medium opacity-40">LinkedIn</p>
                 <a
                   href="#"
                   className="border-b border-[var(--color-text)] pb-0.5 hover:opacity-50 transition-opacity flex items-center gap-1 self-start"

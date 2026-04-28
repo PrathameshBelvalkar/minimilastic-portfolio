@@ -33,23 +33,22 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed top-24 bottom-24 md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl bg-[var(--color-bg)] z-[101] overflow-y-auto border border-theme shadow-2xl"
           >
-            <div className="sticky top-0 right-0 p-6 flex justify-end">
-              <button
-                onClick={onClose}
-                className="p-2 hover:opacity-50 transition-opacity bg-[var(--color-bg)] rounded-full border border-theme"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="px-8 pb-16 md:px-16 flex flex-col gap-12">
-              <div className="aspect-video bg-card-theme border border-theme flex items-center justify-center">
+            <div className="flex flex-col">
+              <div className="relative aspect-video bg-card-theme border-b border-theme flex items-center justify-center">
                 <span className="font-mono text-[10px] opacity-20 uppercase tracking-[0.2em]">
                   {selectedProject.title} / PREVIEW
                 </span>
+
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 p-2 hover:opacity-50 transition-opacity bg-[var(--color-bg)] rounded-full border border-theme"
+                  aria-label="Close"
+                >
+                  <X size={20} />
+                </button>
               </div>
 
-              <div className="flex flex-col gap-8">
+              <div className="p-8 md:p-14 flex flex-col gap-8">
                 <div className="flex justify-between items-baseline">
                   <h2 className="text-4xl font-extrabold tracking-tight uppercase italic">
                     {selectedProject.title}

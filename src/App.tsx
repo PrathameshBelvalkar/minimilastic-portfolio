@@ -150,7 +150,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen pb-32 transition-colors duration-300">
+    <div className="min-h-screen hero-pattern pb-32 transition-colors duration-300">
       <ProjectModal selectedProject={selectedProject} onClose={() => setSelectedProject(null)} />
 
       <Navbar
@@ -174,7 +174,7 @@ export default function App() {
       <MobileMenu isMenuOpen={isMenuOpen} navItems={navItems} onNavigate={() => setIsMenuOpen(false)} />
 
       <main className="px-6 md:px-12 pt-48 max-w-7xl mx-auto">
-        <HeroSection />
+        <HeroSection hideScrollHint={isScrolled} />
         <AboutProfileSection />
         <ExperienceSection experience={experience} />
         <ProjectsSection projects={projects} onSelectProject={(p) => setSelectedProject(p)} />
