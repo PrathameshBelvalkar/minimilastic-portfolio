@@ -1,0 +1,92 @@
+import { AnimatePresence, motion } from 'motion/react';
+import { ArrowUpRight, X } from 'lucide-react';
+
+export interface Project {
+  title: string;
+  desc: string;
+  year: string;
+  tech: string[];
+  longDesc?: string;
+}
+
+type Props = {
+  selectedProject: Project | null;
+  onClose: () => void;
+};
+
+export function ProjectModal({ selectedProject, onClose }: Props) {
+  return (
+    <AnimatePresence>
+      {selectedProject && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] cursor-pointer"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed top-24 bottom-24 md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl bg-[var(--color-bg)] z-[101] overflow-y-auto border border-theme shadow-2xl"
+          >
+            <div className="sticky top-0 right-0 p-6 flex justify-end">
+              <button
+                onClick={onClose}
+                className="p-2 hover:opacity-50 transition-opacity bg-[var(--color-bg)] rounded-full border border-theme"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="px-8 pb-16 md:px-16 flex flex-col gap-12">
+              <div className="aspect-video bg-card-theme border border-theme flex items-center justify-center">
+                <span className="font-mono text-[10px] opacity-20 uppercase tracking-[0.2em]">
+                  {selectedProject.title} / PREVIEW
+                </span>
+              </div>
+
+              <div className="flex flex-col gap-8">
+                <div className="flex justify-between items-baseline">
+                  <h2 className="text-4xl font-extrabold tracking-tight uppercase italic">
+                    {selectedProject.title}
+                  </h2>
+                  <span className="font-mono text-xs opacity-40">{selectedProject.year}</span>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <h4 className="section-label text-[9px]">Description</h4>
+                  <p className="text-xl font-light leading-relaxed opacity-80">
+                    {selectedProject.longDesc || selectedProject.desc}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <h4 className="section-label text-[9px]">Tech Stack</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProject.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="px-3 py-1.5 bg-card-theme border border-theme rounded-full text-xs font-semibold"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button className="mt-8 px-10 py-5 bg-[var(--color-text)] text-[var(--color-bg)] font-bold uppercase tracking-widest text-[10px] hover:opacity-90 transition-opacity flex items-center justify-center gap-3">
+                  View Project <ArrowUpRight size={14} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
