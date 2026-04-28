@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  
+  --text-label: 11px;
+  --tracking-label: 0.15em;
+  
+  /* Theme Variables */
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-border: #eeeeee;
+  --color-card-bg: #f7f7f7;
+  --color-selection-bg: #000000;
+  --color-selection-text: #ffffff;
+  --color-accent: #2563eb;
+
+  --animate-fade-in: fade-in 0.8s ease-out;
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.dark {
+  --color-bg: #000000;
+  --color-text: #ffffff;
+  --color-text-secondary: #aaaaaa;
+  --color-text-muted: #555555;
+  --color-border: #222222;
+  --color-card-bg: #0a0a0a;
+  --color-selection-bg: #ffffff;
+  --color-selection-text: #000000;
+  --color-accent: #60a5fa;
+}
+
+.evening {
+  --color-bg: #1a1412;
+  --color-text: #f4ece6;
+  --color-text-secondary: #dcd0c9;
+  --color-text-muted: #8b7367;
+  --color-border: #3d2b24;
+  --color-card-bg: #251b18;
+  --color-selection-bg: #ff8c42;
+  --color-selection-text: #1a1412;
+  --color-accent: #ff8c42;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text);
+  opacity: 0.1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+body {
+  @apply font-sans antialiased selection:bg-[var(--color-selection-bg)] selection:text-[var(--color-selection-text)];
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+@layer utilities {
+  .section-label {
+    @apply text-[11px] font-bold uppercase tracking-[0.15em];
+    color: var(--color-text-secondary);
+  }
+  
+  .display-title {
+    @apply text-[64px] md:text-[80px] font-extrabold leading-[0.95] tracking-[-0.04em] uppercase;
+  }
+  
+  .border-theme {
+    border-color: var(--color-border);
+  }
+  
+  .bg-card-theme {
+    background-color: var(--color-card-bg);
+  }
+}
