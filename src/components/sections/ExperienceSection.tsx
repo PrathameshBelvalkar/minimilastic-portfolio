@@ -31,7 +31,7 @@ export function ExperienceSection({ experience }: Props) {
         <div className="flex flex-col gap-32">
           {experience.map((job, i) => (
             <div key={i} className="flex flex-col gap-12 border-t border-theme pt-12 first:border-none first:pt-0">
-              <h3 className="text-5xl md:text-8xl font-medium tracking-tight">{job.company}</h3>
+              <h3 className="text-5xl md:text-8xl font-extrabold tracking-tight">{job.company}</h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-32">
                 <div className="flex flex-col gap-12">
