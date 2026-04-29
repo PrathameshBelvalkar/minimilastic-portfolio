@@ -51,13 +51,10 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
                       ]
                     }
                     alt={selectedProject.title}
-                    className="absolute inset-0 w-full h-full object-cover opacity-70"
+                    className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
                   />
                 )}
-                <span className="font-mono text-[10px] opacity-20 uppercase tracking-[0.2em]">
-                  {selectedProject.title} / PREVIEW
-                </span>
 
                 <button
                   onClick={onClose}

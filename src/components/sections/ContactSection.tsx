@@ -1,6 +1,14 @@
 import { motion } from 'motion/react';
 
-export function ContactSection() {
+type ContactLink = Readonly<{ label: string; href: string }>;
+
+type Props = {
+  sectionLabel: string;
+  email: string;
+  links: readonly ContactLink[];
+};
+
+export function ContactSection({ sectionLabel, email, links }: Props) {
   return (
     <section id="contact" className="mb-24">
       <motion.div
@@ -10,21 +18,21 @@ export function ContactSection() {
         transition={{ duration: 0.6 }}
         className="flex flex-col gap-16"
       >
-        <h2 className="section-label">Connect</h2>
+        <h2 className="section-label">{sectionLabel}</h2>
 
         <div className="flex flex-col gap-12">
           <p className="text-3xl md:text-5xl font-light tracking-tight hover:opacity-50 cursor-pointer transition-opacity break-all">
-            hello@alexcarter.dev
+            {email}
           </p>
 
           <div className="flex flex-wrap gap-x-8 gap-y-4">
-            {['LinkedIn', 'GitHub', 'Twitter', 'Bento', 'Read.cv'].map((link) => (
+            {links.map((link) => (
               <a
-                key={link}
-                href="#"
+                key={link.label}
+                href={link.href}
                 className="text-xs font-semibold uppercase tracking-widest border-b border-transparent hover:border-[var(--color-text)] transition-all"
               >
-                {link}
+                {link.label}
               </a>
             ))}
           </div>

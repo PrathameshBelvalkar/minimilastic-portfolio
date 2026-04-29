@@ -7,6 +7,7 @@ type Language = { code: string; flag: string; label: string };
 type Props = {
   isScrolled: boolean;
   isMenuOpen: boolean;
+  brandName: string;
   navItems: string[];
   theme: 'light' | 'evening' | 'dark';
   onToggleTheme: () => void;
@@ -21,6 +22,7 @@ type Props = {
 export function Navbar({
   isScrolled,
   isMenuOpen,
+  brandName,
   navItems,
   theme,
   onToggleTheme,
@@ -50,7 +52,7 @@ export function Navbar({
               exit={{ opacity: 0, y: -5 }}
               className="font-bold text-xs uppercase tracking-widest hover:opacity-50 transition-all block"
             >
-              Alex Carter
+              {brandName}
             </motion.a>
           ) : null}
         </AnimatePresence>
@@ -78,7 +80,7 @@ export function Navbar({
             <img
               src={`https://flagsapi.com/${languages.find((l) => l.code === currentLang)?.flag}/flat/64.png`}
               alt={currentLang}
-              className="w-4 h-4 object-cover rounded-sm shadow-sm"
+              className="w-4 h-4 object-cover rounded-sm"
             />
             <span className="font-mono text-[10px] font-bold tracking-widest">{currentLang}</span>
             <ChevronDown
