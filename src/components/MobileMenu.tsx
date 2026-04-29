@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   isMenuOpen: boolean;
@@ -7,6 +8,16 @@ type Props = {
 };
 
 export function MobileMenu({ isMenuOpen, navItems, onNavigate }: Props) {
+  const { t } = useTranslation();
+
+  const navKeyByItem: Record<string, string> = {
+    About: 'nav.about',
+    Capabilities: 'nav.capabilities',
+    Experience: 'nav.experience',
+    Projects: 'nav.projects',
+    Contact: 'nav.contact',
+  };
+
   return (
     <AnimatePresence>
       {isMenuOpen && (
@@ -23,7 +34,7 @@ export function MobileMenu({ isMenuOpen, navItems, onNavigate }: Props) {
               onClick={onNavigate}
               className="text-4xl font-light tracking-tight hover:opacity-50 transition-opacity"
             >
-              {item}
+              {t(navKeyByItem[item] ?? item)}
             </a>
           ))}
         </motion.div>

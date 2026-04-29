@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { projectImageKeys, projectImages } from '../assets/images';
 
 export interface Project {
@@ -17,10 +18,25 @@ type Props = {
 };
 
 export function ProjectModal({ selectedProject, onClose }: Props) {
+  const { t } = useTranslation();
+
+  const projectKeyByTitle: Record<string, string> = {
+    'Stream Deck': 'streamDeck',
+    'National Buying Consortium': 'nbc',
+    'CarbonExchange AI': 'carbonExchange',
+    'Video Personal Discussion (KYC)': 'vpd',
+  };
+
   const projectImageSrc =
     (selectedProject?.image &&
       projectImages[selectedProject.image as keyof typeof projectImages]) ||
     (projectImageKeys[0] ? projectImages[projectImageKeys[0]] : undefined);
+
+  const projectKey = selectedProject ? projectKeyByTitle[selectedProject.title] : undefined;
+  const description =
+    selectedProject && projectKey
+      ? t(`projects.${projectKey}.longDesc`)
+      : selectedProject?.longDesc || selectedProject?.desc;
 
   return (
     <AnimatePresence>
@@ -70,14 +86,14 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <h4 className="section-label text-[9px]">Description</h4>
+                  <h4 className="section-label text-[9px]">{t('modal.descriptionLabel')}</h4>
                   <p className="text-xl font-light leading-relaxed opacity-80">
-                    {selectedProject.longDesc || selectedProject.desc}
+                    {description}
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <h4 className="section-label text-[9px]">Tech Stack</h4>
+                  <h4 className="section-label text-[9px]">{t('modal.techStackLabel')}</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedProject.tech.map((t) => (
                       <span

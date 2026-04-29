@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { EveningIcon, MoonIcon, SunIcon } from './ThemeIcons';
+import { useTranslation } from 'react-i18next';
 
 type Language = { code: string; flag: string; label: string };
 
@@ -33,6 +34,16 @@ export function Navbar({
   currentLang,
   setCurrentLang
 }: Props) {
+  const { t } = useTranslation();
+
+  const navKeyByItem: Record<string, string> = {
+    About: 'nav.about',
+    Capabilities: 'nav.capabilities',
+    Experience: 'nav.experience',
+    Projects: 'nav.projects',
+    Contact: 'nav.contact',
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-500 ${
@@ -66,7 +77,7 @@ export function Navbar({
               href={`#${item.toLowerCase()}`}
               className="section-label hover:text-[var(--color-text)] transition-colors"
             >
-              {item}
+              {t(navKeyByItem[item] ?? item)}
             </a>
           ))}
         </motion.div>

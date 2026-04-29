@@ -64,7 +64,7 @@ export const portfolioData = {
   languages: [
     { code: 'EN', flag: 'US', label: 'English' },
     { code: 'JP', flag: 'JP', label: 'Japanese' },
-    { code: 'MR', flag: 'IN', label: 'Marathi' },
+    // { code: 'MR', flag: 'IN', label: 'Marathi' },
   ] satisfies Language[],
   navItems: ['About', 'Capabilities', 'Experience', 'Projects', 'Contact'] satisfies string[],
   projects: [
