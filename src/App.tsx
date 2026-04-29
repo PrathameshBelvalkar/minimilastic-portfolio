@@ -16,6 +16,7 @@ import { ExperienceSection } from './components/sections/ExperienceSection';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { portfolioData } from './data';
+import { applyProjectSeo } from './seo';
 
 export default function App() {
   const [theme, setTheme] = useState<'light' | 'evening' | 'dark'>('light');
@@ -64,6 +65,10 @@ export default function App() {
       document.body.style.overflow = 'unset';
     }
   }, [isMenuOpen, selectedProject]);
+
+  useEffect(() => {
+    applyProjectSeo(selectedProject);
+  }, [selectedProject]);
 
   return (
     <div className="min-h-screen hero-pattern pb-32 transition-colors duration-300">

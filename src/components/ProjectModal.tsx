@@ -48,6 +48,7 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
                     alt={selectedProject.title}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                   />
                 )}
 

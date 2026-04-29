@@ -46,7 +46,7 @@ export function Navbar({
           {isScrolled ? (
             <motion.a
               key="name"
-              href="#"
+              href="#about"
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
@@ -81,6 +81,9 @@ export function Navbar({
               src={`https://flagsapi.com/${languages.find((l) => l.code === currentLang)?.flag}/flat/64.png`}
               alt={currentLang}
               className="w-4 h-4 object-cover rounded-sm"
+              loading="lazy"
+              decoding="async"
+              referrerPolicy="no-referrer"
             />
             <span className="font-mono text-[10px] font-bold tracking-widest">{currentLang}</span>
             <ChevronDown
@@ -116,6 +119,9 @@ export function Navbar({
                         className={`w-4 h-4 object-cover rounded-sm transition-transform duration-300 ${
                           currentLang === lang.code ? 'scale-110' : 'opacity-60 group-hover:opacity-100'
                         }`}
+                        loading="lazy"
+                        decoding="async"
+                        referrerPolicy="no-referrer"
                       />
                       <span
                         className={`text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${

@@ -44,6 +44,7 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover transition-opacity"
                     loading="lazy"
+                    decoding="async"
                   />
                 )}
                 {/* <span className="font-mono text-[10px] opacity-20 uppercase tracking-[0.2em]">
