@@ -16,6 +16,7 @@ import { ExperienceSection } from './components/sections/ExperienceSection';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { portfolioData } from './data';
+import i18n, { uiLangToI18nLang } from './i18n';
 import { applyProjectSeo } from './seo';
 
 export default function App() {
@@ -24,7 +25,11 @@ export default function App() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [currentLang, setCurrentLang] = useState(portfolioData.languages[0]?.code ?? 'EN');
+  const [currentLang, setCurrentLang] = useState(() => {
+    const stored = localStorage.getItem('lang');
+    if (stored && uiLangToI18nLang[stored]) return stored;
+    return portfolioData.languages[0]?.code ?? 'EN';
+  });
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   useEffect(() => {
@@ -70,6 +75,11 @@ export default function App() {
     applyProjectSeo(selectedProject);
   }, [selectedProject]);
 
+  useEffect(() => {
+    localStorage.setItem('lang', currentLang);
+    i18n.changeLanguage(uiLangToI18nLang[currentLang] ?? 'en');
+  }, [currentLang]);
+
   return (
     <div className="min-h-screen hero-pattern pb-32 transition-colors duration-300">
       <ProjectModal selectedProject={selectedProject} onClose={() => setSelectedProject(null)} />
@@ -100,12 +110,19 @@ export default function App() {
       />
 
       <main className="px-6 md:px-12 pt-48 max-w-7xl mx-auto">
-        <HeroSection hideScrollHint={isScrolled} {...portfolioData.hero} />
-        <AboutProfileSection {...portfolioData.aboutProfile} />
+        <HeroSection
+          hideScrollHint={isScrolled}
+          titleLines={portfolioData.hero.titleLines}
+          scrollCtaHref={portfolioData.hero.scrollCtaHref}
+        />
+        <AboutProfileSection
+          email={portfolioData.aboutProfile.email}
+          linkedinHref={portfolioData.aboutProfile.linkedinHref}
+        />
         <ExperienceSection experience={portfolioData.experience} />
         <ProjectsSection projects={portfolioData.projects} onSelectProject={(p) => setSelectedProject(p)} />
         <CapabilitiesSection capabilities={portfolioData.capabilities} />
-        <ContactSection {...portfolioData.contact} />
+        <ContactSection email={portfolioData.contact.email} links={portfolioData.contact.links} />
       </main>
 
       <Footer {...portfolioData.footer} />

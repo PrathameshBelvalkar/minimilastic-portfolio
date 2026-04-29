@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 
 type Capability = {
   category: string;
@@ -11,6 +12,9 @@ type Props = {
 };
 
 export function CapabilitiesSection({ capabilities }: Props) {
+  const { t } = useTranslation();
+  const capabilityKeyByIndex = ['ai', 'backend', 'frontendDb'] as const;
+
   return (
     <section id="capabilities" className="mb-48 border-t border-theme pt-12">
       <motion.div
@@ -21,23 +25,28 @@ export function CapabilitiesSection({ capabilities }: Props) {
         className="flex flex-col gap-24"
       >
         <div className="flex flex-col gap-6">
-          <h2 className="section-label">Expertise & Capabilities</h2>
+          <h2 className="section-label">{t('capabilities.sectionHeading')}</h2>
           <h3 className="text-4xl md:text-6xl font-medium tracking-tight max-w-3xl leading-[1.1]">
-            Specialized in the intersection of design precision and engineering excellence.
+            {t('capabilities.sectionSubheading')}
           </h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-          {capabilities.map((cap, i) => (
+          {capabilities.map((cap, i) => {
+            const key = capabilityKeyByIndex[i];
+            const category = key ? t(`capabilities.${key}.category`) : cap.category;
+            const desc = key ? t(`capabilities.${key}.desc`) : cap.desc;
+
+            return (
             <div key={i} className="flex flex-col gap-8 group">
               <div className="flex flex-col gap-4">
                 <span className="font-mono text-[10px] opacity-40 uppercase tracking-[0.2em]">
                   0{i + 1} /
                 </span>
-                <h4 className="text-2xl font-medium">{cap.category}</h4>
+                <h4 className="text-2xl font-medium">{category}</h4>
               </div>
 
-              <p className="opacity-60 leading-relaxed font-light">{cap.desc}</p>
+              <p className="opacity-60 leading-relaxed font-light">{desc}</p>
 
               <div className="flex flex-wrap gap-2 pt-4">
                 {cap.items.map((skill) => (
@@ -50,7 +59,8 @@ export function CapabilitiesSection({ capabilities }: Props) {
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
     </section>

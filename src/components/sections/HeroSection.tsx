@@ -1,25 +1,19 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { fadeInUp, staggerContainer } from '../motionVariants';
 
 type Props = {
   hideScrollHint?: boolean;
   titleLines: readonly string[];
-  whoAmILabel: string;
-  intro: string;
-  subIntro: string;
-  scrollCtaLabel: string;
   scrollCtaHref: string;
 };
 
 export function HeroSection({
   hideScrollHint,
   titleLines,
-  whoAmILabel,
-  intro,
-  subIntro,
-  scrollCtaLabel,
   scrollCtaHref,
 }: Props) {
+  const { t } = useTranslation();
   return (
     <section id="about" className="min-h-[80vh] flex flex-col">
       <motion.div
@@ -36,11 +30,11 @@ export function HeroSection({
         </motion.h1>
 
         <motion.div variants={fadeInUp} className="max-w-xl flex flex-col gap-6">
-          <h2 className="section-label">{whoAmILabel}</h2>
+          <h2 className="section-label">{t('hero.whoAmILabel')}</h2>
           <p className="text-xl md:text-2xl font-light leading-relaxed opacity-80">
-            {intro}
+            {t('hero.intro')}
           </p>
-          <p className="text-lg font-normal opacity-60">{subIntro}</p>
+          <p className="text-lg font-normal opacity-60">{t('hero.subIntro')}</p>
         </motion.div>
 
         <AnimatePresence>
@@ -65,7 +59,7 @@ export function HeroSection({
                   transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
                 />
               </motion.div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{scrollCtaLabel}</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{t('hero.scrollCtaLabel')}</span>
             </motion.a>
           )}
         </AnimatePresence>

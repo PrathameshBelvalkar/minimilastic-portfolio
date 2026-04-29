@@ -1,5 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import type { Project } from '../ProjectModal';
 import { projectImageKeys, projectImages } from '../../assets/images';
 
@@ -9,6 +10,15 @@ type Props = {
 };
 
 export function ProjectsSection({ projects, onSelectProject }: Props) {
+  const { t } = useTranslation();
+
+  const projectKeyByTitle: Record<string, string> = {
+    'Stream Deck': 'streamDeck',
+    'National Buying Consortium': 'nbc',
+    'CarbonExchange AI': 'carbonExchange',
+    'Video Personal Discussion (KYC)': 'vpd',
+  };
+
   return (
     <section id="projects" className="mb-48">
       <motion.div
@@ -19,12 +29,16 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
         className="flex flex-col gap-16"
       >
         <div className="flex justify-between items-baseline">
-          <h2 className="section-label">Projects</h2>
+          <h2 className="section-label">{t('projects.sectionHeading')}</h2>
           <span className="font-mono text-[10px] opacity-40">TOTAL / 04</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
-          {projects.map((project, i) => (
+          {projects.map((project, i) => {
+            const key = projectKeyByTitle[project.title];
+            const desc = key ? t(`projects.${key}.desc`) : project.desc;
+
+            return (
             <motion.div
               key={i}
               whileHover={{ y: -5 }}
@@ -57,12 +71,13 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
                     {project.title}
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="opacity-60 leading-relaxed max-w-sm text-sm">{project.desc}</p>
+                  <p className="opacity-60 leading-relaxed max-w-sm text-sm">{desc}</p>
                 </div>
                 <span className="font-mono text-[10px] opacity-40">{project.year}</span>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
     </section>

@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "about": "About",
+    "capabilities": "Capabilities",
+    "experience": "Experience",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "whoAmILabel": "Who am I",
+    "intro": "Full Stack Developer specializing in building scalable backend systems and high-performance web applications that align with business goals and deliver excellent user experiences.",
+    "subIntro": "Currently exploring the intersection of AI and Software Development at Airrived.",
+    "scrollCtaLabel": "Scroll"
+  },
+  "about": {
+    "sectionLabel": "About / Profile",
+    "headline": "Over the years, I have worked on end-to-end web applications with a strong focus on scalable architecture, secure API design, and seamless user experience",
+    "emailLabel": "Say hello",
+    "linkedinLabel": "LinkedIn",
+    "linkedinCtaLabel": "Explore LinkedIn",
+    "focusAreas": ["AI & Python Development", "Backend Engineering"],
+    "paragraphs": [
+      "AI and Python Developer with 2.5+ years of experience building intelligent backend systems, production-grade APIs, and automation workflows. Strong expertise in Python, SQL databases, authentication, and secure API design.",
+      "Experienced in AI integrations, real-time systems, and enterprise platforms. I prioritize building clean, maintainable codebases that enable continuous improvement, observability, and scalable delivery.",
+      "I hold a Master of Computer Applications (MCA) in Computer Science from KIT's IMER, Kolhapur, and a Bachelor of Computer Science from The New College, Kolhapur.",
+      "I am fluent in English, Hindi, and Marathi, with elementary proficiency in Japanese, and have experience working across diverse and collaborative teams."
+    ]
+  },
+  "experience": {
+    "sectionHeading": "Selected Experience",
+    "positionLabel": "Position",
+    "locationLabel": "Location",
+    "industryLabel": "Industry",
+    "websiteLabel": "Website",
+    "jobs": {
+      "airrived": {
+        "tagline": "Software and AI development",
+        "description": [
+          "Working as a Software and AI Python Developer, contributing to intelligent software solutions leveraging modern AI and Python-based technologies."
+        ]
+      },
+      "ramee": {
+        "tagline": "Enterprise software solutions",
+        "description": [
+          "Developed secure backend services and APIs with strong authentication and role-based access control, focused on reliability and performance.",
+          "Designed and optimized MySQL and PostgreSQL schemas for financial and operational systems, improving data integrity and reporting workflows."
+        ]
+      },
+      "noitavonne": {
+        "tagline": "Full stack web application development",
+        "description": [
+          "Built enterprise applications and APIs, working with MongoDB and SQL databases for transactional and reporting systems.",
+          "Implemented authentication, authorization, and secure backend communication while optimizing services for scalability and reliability across multiple projects."
+        ]
+      }
+    }
+  },
+  "projects": {
+    "sectionHeading": "Projects",
+    "streamDeck": {
+      "desc": "A real-time video streaming platform built with Node.js, RTMP, and WebSocket.",
+      "longDesc": "Developed backend services for real-time video and data streaming. Built REST APIs and WebSocket services for stream control, monitoring, and analytics. Designed PostgreSQL schemas for stream sessions and metadata with high availability in mind."
+    },
+    "nbc": {
+      "desc": "Accounting and margin management platform for UK FMCG suppliers.",
+      "longDesc": "Designed and developed a custom accounting and margin management platform for UK FMCG suppliers. Built scalable NestJS backend services handling pricing, rebates, commissions, and margins. Centralized supplier-member financial workflows with automated validations and reporting dashboards."
+    },
+    "carbonExchange": {
+      "desc": "A platform to calculate and manage carbon credits based on land value.",
+      "longDesc": "Developed a platform that calculates carbon credits based on land value, aiding companies in understanding their environmental impact. The system enables businesses to track, manage, and trade carbon credits with transparency and accuracy."
+    },
+    "vpd": {
+      "desc": "Secure video-based KYC platform for banks with live streaming and fraud prevention.",
+      "longDesc": "Developed a real-time video discussion platform for banks to conduct online KYC. Built NestJS backend services for session management, authentication, and audit logs. Integrated live video streaming using RTMP and video SDKs with encrypted communication and fraud-prevention workflows."
+    }
+  },
+  "capabilities": {
+    "sectionHeading": "Expertise & Capabilities",
+    "sectionSubheading": "Specialized in the intersection of design precision and engineering excellence.",
+    "ai": {
+      "category": "AI & Python Development",
+      "desc": "Building intelligent software solutions and AI-powered applications with Python."
+    },
+    "backend": {
+      "category": "Backend Engineering",
+      "desc": "Building performant, scalable backend systems and secure RESTful APIs with 2.5+ years of experience."
+    },
+    "frontendDb": {
+      "category": "Frontend & Database",
+      "desc": "Crafting responsive interfaces and designing robust, optimized data layers."
+    }
+  },
+  "contact": {
+    "sectionLabel": "Connect"
+  },
+  "modal": {
+    "descriptionLabel": "Description",
+    "techStackLabel": "Tech Stack"
+  }
+}
