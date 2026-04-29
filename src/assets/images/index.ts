@@ -1,30 +1,19 @@
-type ImportMetaGlobOptions = {
-  eager?: boolean;
-  import?: string;
-};
+import nbcMockup from './NBC_Mockup.png';
+import regridParcel from './regrid_parcel.png';
+import siloStream from './silo_stream.png';
+import subtitleMaker from './subtitle_maker.png';
 
-declare global {
-  interface ImportMeta {
-    glob: (pattern: string, options?: ImportMetaGlobOptions) => Record<string, unknown>;
-  }
-}
+export const projectImages = {
+  NBC_Mockup: nbcMockup,
+  regrid_parcel: regridParcel,
+  silo_stream: siloStream,
+  subtitle_maker: subtitleMaker,
+} as const;
 
-const imageModules = import.meta.glob(
-  "./**/*.{png,jpg,jpeg,svg,webp,gif,avif,ico}",
-  { eager: true, import: "default" },
-) as Record<string, string>;
+export type ProjectImageKey = keyof typeof projectImages;
 
-export type ImagesMap = Record<string, string>;
+export const projectImageKeys = Object.keys(projectImages) as ProjectImageKey[];
 
-export const images: ImagesMap = Object.fromEntries(
-  Object.entries(imageModules).map(([path, url]) => [
-    path.replace(/^\.\//, "").replace(/\.[^/.]+$/, ""),
-    url,
-  ]),
-);
-
-export const imagePaths = Object.keys(images);
-
-export function getImage(key: string) {
-  return images[key];
+export function getProjectImage(key: ProjectImageKey) {
+  return projectImages[key];
 }

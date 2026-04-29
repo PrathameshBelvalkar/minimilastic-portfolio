@@ -14,7 +14,7 @@ export function MobileMenu({ isMenuOpen, navItems, onNavigate }: Props) {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed inset-0 bg-[var(--color-bg)] flex flex-col items-center justify-center gap-8 pt-24 md:hidden z-[45]"
+          className="fixed inset-0 bg-[var(--color-bg)] flex flex-col items-center justify-center gap-8 pt-8 md:hidden z-[45]"
         >
           {navItems.map((item) => (
             <a

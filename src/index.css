@@ -88,7 +88,10 @@ body {
   }
   
   .display-title {
-    @apply text-[64px] md:text-[80px] font-extrabold leading-[0.95] tracking-[-0.04em] uppercase;
+    @apply font-extrabold leading-[0.95] tracking-[-0.04em] uppercase;
+    font-size: clamp(44px, 10vw, 80px);
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
   
   .border-theme {

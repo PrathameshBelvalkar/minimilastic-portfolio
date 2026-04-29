@@ -1,12 +1,13 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, X } from 'lucide-react';
-import { images, imagePaths } from '../assets/images';
+import { projectImageKeys, projectImages } from '../assets/images';
 
 export interface Project {
   title: string;
   desc: string;
   year: string;
   tech: string[];
+  image: string;
   longDesc?: string;
 }
 
@@ -16,6 +17,11 @@ type Props = {
 };
 
 export function ProjectModal({ selectedProject, onClose }: Props) {
+  const projectImageSrc =
+    (selectedProject?.image &&
+      projectImages[selectedProject.image as keyof typeof projectImages]) ||
+    (projectImageKeys[0] ? projectImages[projectImageKeys[0]] : undefined);
+
   return (
     <AnimatePresence>
       {selectedProject && (
@@ -36,20 +42,9 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
           >
             <div className="flex flex-col">
               <div className="relative aspect-video bg-card-theme border-b border-theme flex items-center justify-center overflow-hidden">
-                {imagePaths.length > 0 && (
+                {projectImageSrc && (
                   <img
-                    src={
-                      images[
-                        imagePaths[
-                          Math.abs(
-                            Array.from(selectedProject.title).reduce(
-                              (acc, c) => acc + c.charCodeAt(0),
-                              0,
-                            ),
-                          ) % imagePaths.length
-                        ]
-                      ]
-                    }
+                    src={projectImageSrc}
                     alt={selectedProject.title}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
@@ -94,9 +89,9 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
                   </div>
                 </div>
 
-                <button className="mt-8 px-10 py-5 bg-[var(--color-text)] text-[var(--color-bg)] font-bold uppercase tracking-widest text-[10px] hover:opacity-90 transition-opacity flex items-center justify-center gap-3">
+                {/* <button className="mt-8 px-10 py-5 bg-[var(--color-text)] text-[var(--color-bg)] font-bold uppercase tracking-widest text-[10px] hover:opacity-90 transition-opacity flex items-center justify-center gap-3">
                   View Project <ArrowUpRight size={14} />
-                </button>
+                </button> */}
               </div>
             </div>
           </motion.div>

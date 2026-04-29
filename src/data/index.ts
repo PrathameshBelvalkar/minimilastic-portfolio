@@ -38,7 +38,7 @@ export const portfolioData = {
       'Over the years, I have worked on end-to-end web applications with a strong focus on scalable architecture, secure API design, and seamless user experience',
     focusAreas: ['AI & Python Development', 'Backend Engineering'],
     emailLabel: 'Say hello',
-    email: 'pprathameshbelvalkar544@gmail.com',
+    email: 'prathameshbelvalkars@gmail.com',
     linkedinLabel: 'LinkedIn',
     linkedinCtaLabel: 'Explore LinkedIn',
     linkedinHref: 'https://www.linkedin.com/in/prathameshbelvalkar-83b72a267',
@@ -51,13 +51,10 @@ export const portfolioData = {
   },
   contact: {
     sectionLabel: 'Connect',
-    email: 'pprathameshbelvalkar544@gmail.com',
+    email: 'prathameshbelvalkars@gmail.com',
     links: [
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/prathameshbelvalkar-83b72a267' },
-      { label: 'GitHub', href: '#' },
-      { label: 'Twitter', href: '#' },
-      { label: 'Portfolio', href: 'https://prathameshbelvalkar.vercel.app' },
-      { label: 'Read.cv', href: '#' },
+      { label: 'GitHub', href: 'https://github.com/prathameshbelvalkar' },
     ],
   },
   footer: {
@@ -76,6 +73,7 @@ export const portfolioData = {
       desc: 'A real-time video streaming platform built with Node.js, RTMP, and WebSocket.',
       year: '2024',
       tech: ['Node.js', 'Express.js', 'React.js', 'PostgreSQL', 'WebSocket', 'RTMP'],
+      image: 'silo_stream',
       longDesc:
         'Developed backend services for real-time video and data streaming. Built REST APIs and WebSocket services for stream control, monitoring, and analytics. Designed PostgreSQL schemas for stream sessions and metadata with high availability in mind.',
     },
@@ -84,6 +82,7 @@ export const portfolioData = {
       desc: 'Accounting and margin management platform for UK FMCG suppliers.',
       year: '2025',
       tech: ['NestJS', 'Node.js', 'React.js', 'MySQL', 'REST APIs'],
+      image: 'NBC_Mockup',
       longDesc:
         'Designed and developed a custom accounting and margin management platform for UK FMCG suppliers. Built scalable NestJS backend services handling pricing, rebates, commissions, and margins. Centralized supplier-member financial workflows with automated validations and reporting dashboards.',
     },
@@ -92,6 +91,7 @@ export const portfolioData = {
       desc: 'A platform to calculate and manage carbon credits based on land value.',
       year: '2024',
       tech: ['Node.js', 'React.js', 'MongoDB', 'REST APIs'],
+      image: 'regrid_parcel',
       longDesc:
         'Developed a platform that calculates carbon credits based on land value, aiding companies in understanding their environmental impact. The system enables businesses to track, manage, and trade carbon credits with transparency and accuracy.',
     },
@@ -100,6 +100,7 @@ export const portfolioData = {
       desc: 'Secure video-based KYC platform for banks with live streaming and fraud prevention.',
       year: '2025',
       tech: ['NestJS', 'Node.js', 'Live Video Streaming', 'RTMP', 'REST APIs'],
+      image: 'subtitle_maker',
       longDesc:
         'Developed a real-time video discussion platform for banks to conduct online KYC. Built NestJS backend services for session management, authentication, and audit logs. Integrated live video streaming using RTMP and video SDKs with encrypted communication and fraud-prevention workflows.',
     },
@@ -139,13 +140,13 @@ export const portfolioData = {
   ] satisfies Capability[],
   experience: [
     {
-      company: 'Airrived',
+      company: 'Airrived AI',
       tagline: 'Software and AI development',
       period: 'Mar 2026 — Present',
       position: 'Software and AI Python Developer',
       location: 'India',
       industry: 'Technology / AI',
-      website: '#',
+      website: 'airrived.ai',
       description: [
         'Working as a Software and AI Python Developer, contributing to intelligent software solutions leveraging modern AI and Python-based technologies.',
       ],
@@ -157,7 +158,7 @@ export const portfolioData = {
       position: 'Software Engineer',
       location: 'Pune (Aundh), India',
       industry: 'Software',
-      website: '#',
+      website: 'rameesystems.com',
       description: [
         'Developed secure backend services and APIs with strong authentication and role-based access control, focused on reliability and performance.',
         'Designed and optimized MySQL and PostgreSQL schemas for financial and operational systems, improving data integrity and reporting workflows.',
@@ -170,7 +171,7 @@ export const portfolioData = {
       position: 'Full Stack Developer',
       location: 'Kolhapur, Maharashtra, India',
       industry: 'Software',
-      website: '#',
+      website: 'noitavonne.com',
       description: [
         'Built enterprise applications and APIs, working with MongoDB and SQL databases for transactional and reporting systems.',
         'Implemented authentication, authorization, and secure backend communication while optimizing services for scalability and reliability across multiple projects.',

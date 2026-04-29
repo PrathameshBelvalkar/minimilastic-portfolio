@@ -1,7 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Project } from '../ProjectModal';
-import { images, imagePaths } from '../../assets/images';
+import { projectImageKeys, projectImages } from '../../assets/images';
 
 type Props = {
   projects: Project[];
@@ -32,9 +32,15 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
               className="flex flex-col gap-6 cursor-pointer group"
             >
               <div className="relative aspect-[4/3] bg-card-theme flex items-center justify-center border border-theme overflow-hidden">
-                {imagePaths.length > 0 && (
+                {((project.image &&
+                  projectImages[project.image as keyof typeof projectImages]) ||
+                  (projectImageKeys[0] && projectImages[projectImageKeys[0]])) && (
                   <img
-                    src={images[imagePaths[i % imagePaths.length]]}
+                    src={
+                      (project.image &&
+                        projectImages[project.image as keyof typeof projectImages]) ||
+                      projectImages[projectImageKeys[0]]
+                    }
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover transition-opacity"
                     loading="lazy"
