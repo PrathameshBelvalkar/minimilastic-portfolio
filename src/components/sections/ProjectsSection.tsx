@@ -15,12 +15,12 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
   const projectKeyByTitle: Record<string, string> = {
     'Stream Deck': 'streamDeck',
     'National Buying Consortium': 'nbc',
-    'CarbonExchange AI': 'carbonExchange',
+    'Carbon Exchange AI': 'carbonExchange',
     'Video Personal Discussion (KYC)': 'vpd',
   };
 
   return (
-    <section id="projects" className="mb-48">
+    <section id="projects" className="mb-24">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
