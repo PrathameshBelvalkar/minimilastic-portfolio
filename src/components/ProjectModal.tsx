@@ -23,7 +23,7 @@ export function ProjectModal({ selectedProject, onClose }: Props) {
   const projectKeyByTitle: Record<string, string> = {
     'Stream Deck': 'streamDeck',
     'National Buying Consortium': 'nbc',
-    'CarbonExchange AI': 'carbonExchange',
+    'Carbon Exchange AI': 'carbonExchange',
     'Video Personal Discussion (KYC)': 'vpd',
   };
 

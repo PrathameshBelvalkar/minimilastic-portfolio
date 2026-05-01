@@ -16,7 +16,7 @@ export function CapabilitiesSection({ capabilities }: Props) {
   const capabilityKeyByIndex = ['ai', 'backend', 'frontendDb'] as const;
 
   return (
-    <section id="capabilities" className="mb-48 border-t border-theme pt-12">
+    <section id="capabilities" className="mb-24 border-t border-theme pt-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

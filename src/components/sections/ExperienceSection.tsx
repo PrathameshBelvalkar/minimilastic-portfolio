@@ -27,7 +27,7 @@ export function ExperienceSection({ experience }: Props) {
   };
 
   return (
-    <section id="experience" className="mb-48">
+    <section id="experience" className="mb-24">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export function ExperienceSection({ experience }: Props) {
       >
         <h2 className="section-label">{t('experience.sectionHeading')}</h2>
 
-        <div className="flex flex-col gap-32">
+        <div className="flex flex-col gap-18">
           {experience.map((job, i) => {
             const jobKey = companyKeyByName[job.company];
             const tagline = jobKey ? t(`experience.jobs.${jobKey}.tagline`) : job.tagline;

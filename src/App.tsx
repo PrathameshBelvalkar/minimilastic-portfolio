@@ -81,7 +81,7 @@ export default function App() {
   }, [currentLang]);
 
   return (
-    <div className="min-h-screen hero-pattern pb-32 transition-colors duration-300">
+    <div className="min-h-screen hero-pattern transition-colors duration-300">
       <ProjectModal selectedProject={selectedProject} onClose={() => setSelectedProject(null)} />
 
       <Navbar
@@ -109,7 +109,7 @@ export default function App() {
         onNavigate={() => setIsMenuOpen(false)}
       />
 
-      <main className="px-6 md:px-12 pt-48 max-w-7xl mx-auto">
+      <main className="px-6 md:px-12 pt-30 max-w-7xl mx-auto">
         <HeroSection
           hideScrollHint={isScrolled}
           titleLines={portfolioData.hero.titleLines}

@@ -87,7 +87,7 @@ export const portfolioData = {
         'Designed and developed a custom accounting and margin management platform for UK FMCG suppliers. Built scalable NestJS backend services handling pricing, rebates, commissions, and margins. Centralized supplier-member financial workflows with automated validations and reporting dashboards.',
     },
     {
-      title: 'CarbonExchange AI',
+      title: 'Carbon Exchange AI',
       desc: 'A platform to calculate and manage carbon credits based on land value.',
       year: '2024',
       tech: ['Node.js', 'React.js', 'MongoDB', 'REST APIs'],
