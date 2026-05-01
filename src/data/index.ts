@@ -41,7 +41,7 @@ export const portfolioData = {
     email: 'prathameshbelvalkars@gmail.com',
     linkedinLabel: 'LinkedIn',
     linkedinCtaLabel: 'Explore LinkedIn',
-    linkedinHref: 'https://www.linkedin.com/in/prathameshbelvalkar-83b72a267',
+    linkedinHref: 'https://www.linkedin.com/in/prathamesh-belvalkar-83b72a267/',
     paragraphs: [
       'AI and Python Developer with 2.5+ years of experience building intelligent backend systems, production-grade APIs, and automation workflows. Strong expertise in Python, SQL databases, authentication, and secure API design.',
       'Experienced in AI integrations, real-time systems, and enterprise platforms. I prioritize building clean, maintainable codebases that enable continuous improvement, observability, and scalable delivery.',
@@ -53,7 +53,7 @@ export const portfolioData = {
     sectionLabel: 'Connect',
     email: 'prathameshbelvalkars@gmail.com',
     links: [
-      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/prathameshbelvalkar-83b72a267' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/prathamesh-belvalkar-83b72a267/' },
       { label: 'GitHub', href: 'https://github.com/prathameshbelvalkar' },
     ],
   },
