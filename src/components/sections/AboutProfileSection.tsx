@@ -16,7 +16,7 @@ export function AboutProfileSection({
   const paragraphs = t('about.paragraphs', { returnObjects: true }) as string[];
 
   return (
-    <section className="mb-24 border-t border-theme pt-8 md:pt-12">
+    <section id="about" className="mb-24 border-t border-theme pt-8 md:pt-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

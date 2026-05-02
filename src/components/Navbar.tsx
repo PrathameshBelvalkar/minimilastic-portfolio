@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import { Link } from 'react-router';
 import { EveningIcon, MoonIcon, SunIcon } from './ThemeIcons';
 import { useTranslation } from 'react-i18next';
 
@@ -42,7 +43,10 @@ export function Navbar({
     Experience: 'nav.experience',
     Projects: 'nav.projects',
     Contact: 'nav.contact',
+    Blog: 'nav.blog',
   };
+
+  const pageNavItems = new Set(['Blog']);
 
   return (
     <nav
@@ -57,7 +61,7 @@ export function Navbar({
           {isScrolled ? (
             <motion.a
               key="name"
-              href="#about"
+              href="#home"
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
@@ -71,15 +75,25 @@ export function Navbar({
 
       <div className="flex items-center gap-8">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="hidden md:flex gap-8">
-          {navItems.map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="section-label hover:text-[var(--color-text)] transition-colors"
-            >
-              {t(navKeyByItem[item] ?? item)}
-            </a>
-          ))}
+          {navItems.map((item) =>
+            pageNavItems.has(item) ? (
+              <Link
+                key={item}
+                to={`/${item.toLowerCase()}`}
+                className="section-label hover:text-[var(--color-text)] transition-colors"
+              >
+                {t(navKeyByItem[item] ?? item)}
+              </Link>
+            ) : (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="section-label hover:text-[var(--color-text)] transition-colors"
+              >
+                {t(navKeyByItem[item] ?? item)}
+              </a>
+            )
+          )}
         </motion.div>
 
         <div className="relative">
