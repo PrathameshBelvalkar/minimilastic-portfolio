@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent } from '../blog';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
+import SittingReading from '../components/illustrations/SittingReading';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 import NotFoundPage from './NotFoundPage';
 
@@ -312,6 +313,7 @@ export default function BlogPostPage() {
   }
 
   return (
+    <>
     <main className="px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto flex flex-col gap-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -389,5 +391,10 @@ export default function BlogPostPage() {
           </aside>
       </div>
     </main>
+
+    <div className="hidden lg:block fixed bottom-0 right-0 pointer-events-none select-none z-0" aria-hidden>
+      <SittingReading className="w-64 h-64 opacity-10" />
+    </div>
+    </>
   );
 }

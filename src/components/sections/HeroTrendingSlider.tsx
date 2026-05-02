@@ -74,7 +74,7 @@ export function HeroTrendingSlider({ posts }: Props) {
         </div>
       </div>
 
-      <div className="relative flex-1 min-h-[min(200px,28vh)] overflow-hidden rounded-xl border border-theme bg-[var(--color-card-bg)]">
+      <div className="relative flex-1 min-h-[min(200px,28vh)] overflow-hidden rounded-xl  bg-[var(--color-card-bg)]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={post.slug}

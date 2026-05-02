@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import Readingman from '../components/illustrations/Readingman';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
@@ -57,7 +58,8 @@ export default function BlogPage() {
   );
 
   return (
-    <main className="px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto">
+    <>
+    <main className="relative px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -210,5 +212,10 @@ export default function BlogPage() {
         </AnimatePresence>
       </motion.div>
     </main>
+
+    <div className="hidden lg:block fixed bottom-0 right-0 pointer-events-none select-none z-0" aria-hidden>
+      <Readingman className="w-64 h-64 opacity-10" />
+    </div>
+  </>
   );
 }
