@@ -1,13 +1,13 @@
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
-import { AppRouter } from './router.tsx';
+import App from './App.tsx';
 import './i18n';
 import './index.css';
 import { Analytics } from '@vercel/analytics/react';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AppRouter />
+    <App />
     <Analytics />
   </StrictMode>,
 );
