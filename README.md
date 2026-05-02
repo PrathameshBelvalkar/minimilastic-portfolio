@@ -1,20 +1,51 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Minimal dev portfolio
 
-# Run and deploy your AI Studio app
+Personal developer portfolio and blog built with React, Vite, and TypeScript.
 
-This contains everything you need to run your app locally.
+## Stack
 
-View your app in AI Studio: https://ai.studio/apps/b4338df0-cd3b-40bc-bbe9-ec5b5f792a44
+- React 19, React Router 7, Vite 6
+- Tailwind CSS 4
+- MDX blog posts with syntax highlighting
+- i18next, Motion, Mermaid, Lucide icons
+- Optional Vercel Analytics
 
-## Run Locally
+## Features
 
-**Prerequisites:**  Node.js
+- Home page with hero, about, capabilities, experience, projects, and contact sections
+- Blog index and individual post pages from MDX content
+- Light and dark theme
+- Optional Gemini API integration (see environment variables)
 
+## Prerequisites
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- Node.js (current LTS recommended)
+
+## Setup
+
+1. Install dependencies: `npm install`
+2. Copy `.env.example` to `.env.local` and set variables as needed
+3. Start the dev server: `npm run dev`
+
+The app serves on port 3000 by default (`vite.config` / `package.json` scripts).
+
+## Scripts
+
+| Command        | Description              |
+| -------------- | ------------------------ |
+| `npm run dev`  | Development server       |
+| `npm run build`| Production build         |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Typecheck (no emit)      |
+
+## Environment
+
+| Variable          | Purpose                                      |
+| ----------------- | -------------------------------------------- |
+| `GEMINI_API_KEY`  | Google GenAI / Gemini API (if used)          |
+| `APP_URL`         | Hosted app URL for links and callbacks       |
+| `VITE_SITE_URL`   | Public site URL (e.g. canonical / SEO base) |
+
+## License
+
+Private project (`private` in `package.json`).
