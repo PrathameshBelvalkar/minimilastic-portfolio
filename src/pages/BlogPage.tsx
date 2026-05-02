@@ -1,15 +1,35 @@
-import { Search, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router';
 import { blogCategories, blogPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
 import { TrendingBlogCarousel } from '../components/blog/TrendingBlogCarousel';
 
-export default function BlogPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('All');
+const PAGE_SIZE = 3;
 
-  const trendingPosts = useMemo(() => blogPosts.slice(0, 5), [blogPosts]);
+export default function BlogPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('q') ?? '';
+  const activeCategory = searchParams.get('cat') ?? 'All';
+  const currentPage = Math.max(1, Number(searchParams.get('page') ?? '1'));
+
+  function setParam(updates: Record<string, string>) {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      Object.entries(updates).forEach(([k, v]) => {
+        if (v === '' || v === 'All' || v === '1') next.delete(k);
+        else next.set(k, v);
+      });
+      return next;
+    }, { replace: true });
+  }
+
+  function resetPage(updates: Record<string, string>) {
+    setParam({ ...updates, page: '1' });
+  }
+
+  const trendingPosts = useMemo(() => blogPosts.slice(0, 5), []);
 
   const filtered = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
@@ -23,6 +43,13 @@ export default function BlogPage() {
       return matchesCategory && matchesSearch;
     });
   }, [searchQuery, activeCategory]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+
+  const paginated = useMemo(
+    () => filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filtered, currentPage],
+  );
 
   return (
     <main className="px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto">
@@ -56,7 +83,7 @@ export default function BlogPage() {
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => resetPage({ q: e.target.value })}
               placeholder="Search posts, tags..."
               className="w-full pl-10 pr-10 py-3 bg-card-theme border border-theme rounded-lg text-sm placeholder:opacity-40 focus:outline-none focus:border-[var(--color-text-muted)] transition-colors duration-200"
               style={{ color: 'var(--color-text)', background: 'var(--color-card-bg)' }}
@@ -67,7 +94,7 @@ export default function BlogPage() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => resetPage({ q: '' })}
                   className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40 hover:opacity-100 transition-opacity"
                 >
                   <X size={14} />
@@ -80,7 +107,7 @@ export default function BlogPage() {
             {blogCategories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => resetPage({ cat })}
                 className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all duration-200 ${
                   activeCategory === cat
                     ? 'border-[var(--color-text)] bg-[var(--color-text)] text-[var(--color-bg)]'
@@ -99,16 +126,58 @@ export default function BlogPage() {
         <AnimatePresence mode="wait">
           {filtered.length > 0 ? (
             <motion.div
-              key={`${activeCategory}-${searchQuery}`}
+              key={`${activeCategory}-${searchQuery}-${currentPage}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="flex flex-col gap-8"
             >
-              {filtered.map((post, i) => (
-                <BlogCard key={post.slug} post={post} index={i} />
-              ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {paginated.map((post, i) => (
+                  <BlogCard key={post.slug} post={post} index={i} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 pt-4 border-t border-theme">
+                  <button
+                    onClick={() => setParam({ page: String(Math.max(1, currentPage - 1)) })}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-lg border border-theme disabled:opacity-20 hover:border-[var(--color-text-muted)] transition-all duration-200 disabled:cursor-not-allowed"
+                    aria-label="Previous page"
+                  >
+                    <ChevronLeft size={14} />
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setParam({ page: String(page) })}
+                      className={`w-8 h-8 rounded-lg text-[10px] font-bold uppercase tracking-widest border transition-all duration-200 ${
+                        page === currentPage
+                          ? 'border-[var(--color-text)] bg-[var(--color-text)] text-[var(--color-bg)]'
+                          : 'border-theme opacity-50 hover:opacity-100 hover:border-[var(--color-text-muted)]'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setParam({ page: String(Math.min(totalPages, currentPage + 1)) })}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded-lg border border-theme disabled:opacity-20 hover:border-[var(--color-text-muted)] transition-all duration-200 disabled:cursor-not-allowed"
+                    aria-label="Next page"
+                  >
+                    <ChevronRight size={14} />
+                  </button>
+
+                  <span className="ml-2 font-mono text-[10px] opacity-30 uppercase tracking-widest">
+                    {currentPage} / {totalPages}
+                  </span>
+                </div>
+              )}
             </motion.div>
           ) : (
             <motion.div
@@ -126,7 +195,7 @@ export default function BlogPage() {
                 {activeCategory !== 'All' ? ` in ${activeCategory}` : ''}.
               </p>
               <button
-                onClick={() => { setSearchQuery(''); setActiveCategory('All'); }}
+                onClick={() => resetPage({ q: '', cat: 'All' })}
                 className="mt-2 text-[10px] font-bold uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity border-b border-[var(--color-text-muted)] pb-0.5"
               >
                 Clear filters

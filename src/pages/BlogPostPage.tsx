@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent } from '../blog';
+import { MermaidDiagram } from '../components/blog/MermaidDiagram';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MDXComponents = Record<string, React.ComponentType<any>>;
@@ -116,15 +117,23 @@ function buildMdxComponents(): MDXComponents {
         </code>
       );
     },
-    pre: ({ children, ...props }) => (
-      <pre
-        className="overflow-x-auto rounded-xl border border-theme px-5 py-4 mb-8 text-[0.82rem] leading-[1.75] font-mono"
-        style={{ background: 'var(--color-card-bg)' }}
-        {...props}
-      >
-        {children}
-      </pre>
-    ),
+    pre: ({ children, ...props }) => {
+      const child = React.Children.only(children) as React.ReactElement<{ className?: string; children?: React.ReactNode }>;
+      const lang = child?.props?.className ?? '';
+      if (lang.includes('language-mermaid')) {
+        const code = String(child?.props?.children ?? '').trim();
+        return <MermaidDiagram code={code} />;
+      }
+      return (
+        <pre
+          className="overflow-x-auto rounded-xl border border-theme px-5 py-4 mb-8 text-[0.82rem] leading-[1.75] font-mono"
+          style={{ background: 'var(--color-card-bg)' }}
+          {...props}
+        >
+          {children}
+        </pre>
+      );
+    },
     img: ({ src, alt, ...props }) => (
       <figure className="my-8">
         <img
@@ -306,7 +315,12 @@ export default function BlogPostPage() {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 border border-theme rounded opacity-50"
+                      className="font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded transition-all duration-200 cursor-default"
+                      style={{
+                        background: 'color-mix(in oklab, var(--color-accent) 12%, transparent)',
+                        color: 'var(--color-accent)',
+                        border: '1px solid color-mix(in oklab, var(--color-accent) 35%, transparent)',
+                      }}
                     >
                       {tag}
                     </span>

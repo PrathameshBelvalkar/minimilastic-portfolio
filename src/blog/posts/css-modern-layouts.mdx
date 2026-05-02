@@ -1,0 +1,120 @@
+---
+title: "Modern CSS Layout Techniques Worth Knowing"
+date: "2026-02-28"
+category: "Frontend"
+tags: ["CSS", "Layout", "Grid", "Flexbox", "Design"]
+excerpt: "Container queries, CSS Grid subgrid, logical properties, and the modern CSS features that make responsive layout genuinely enjoyable to write."
+readTime: "6 min"
+---
+
+## CSS Has Changed More in Five Years Than the Previous Fifteen
+
+Container queries, `has()`, `subgrid`, `@layer`, logical properties, `:is()` — the platform is catching up to frameworks that existed to paper over its gaps. Many layout patterns that required JavaScript or complex workarounds are now pure CSS.
+
+## Container Queries Over Media Queries
+
+Media queries couple your component's layout to the viewport. Container queries couple it to the component's own context — which is what you almost always actually want:
+
+```css
+.card-grid {
+  container-type: inline-size;
+  container-name: card-grid;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@container card-grid (min-width: 400px) {
+  .card {
+    grid-template-columns: auto 1fr;
+  }
+}
+```
+
+Now `.card` adapts based on its container's width, not the viewport. A card in a sidebar and the same card in a main column can have different layouts without duplicating CSS.
+
+## CSS Grid Subgrid
+
+The eternal problem: aligning items across sibling grid containers. `subgrid` solves it:
+
+```css
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.post-card {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+}
+```
+
+With `subgrid`, each card's rows participate in the parent grid. Titles align across columns. Metadata aligns across columns. No JavaScript height-synchronization hacks.
+
+## Logical Properties for Internationalization
+
+Stop writing `margin-left` and `padding-right`. Use logical properties that adapt to text direction:
+
+```css
+.component {
+  margin-inline: auto;
+  padding-block: 1.5rem;
+  padding-inline: 1rem;
+  border-inline-start: 2px solid currentColor;
+  inset-inline-start: 0;
+}
+```
+
+In LTR layouts, `margin-inline-start` is `margin-left`. In RTL layouts, it automatically becomes `margin-right`. Write once, works in both directions.
+
+## The `has()` Selector
+
+CSS can now select a parent based on its children:
+
+```css
+.form-field:has(input:invalid) label {
+  color: var(--color-error);
+}
+
+.card:has(img) {
+  grid-template-rows: auto 1fr;
+}
+
+nav:has(.dropdown:hover) .overlay {
+  display: block;
+}
+```
+
+This eliminates an entire category of JavaScript that was only needed to add classes to parents when children changed state.
+
+## Cascade Layers for Library Code
+
+`@layer` lets you explicitly control specificity ordering:
+
+```css
+@layer reset, base, components, utilities;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+}
+
+@layer components {
+  .button { /* component styles */ }
+}
+
+@layer utilities {
+  .sr-only { /* always wins over components */ }
+}
+```
+
+Utilities beat components beat base styles — by layer declaration, not specificity war. No more `!important` to override a library.
+
+## The Principle
+
+Modern CSS is declarative in the way it was always meant to be. The patterns above remove the need for JavaScript to handle layout concerns. Less JavaScript means less to parse, less to execute, and fewer edge cases when interaction state changes unexpectedly.
+
+Let the platform do the work.

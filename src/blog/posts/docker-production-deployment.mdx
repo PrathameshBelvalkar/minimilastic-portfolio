@@ -1,0 +1,122 @@
+---
+title: "Docker in Production: Beyond the Basics"
+date: "2026-04-18"
+category: "DevOps"
+tags: ["Docker", "DevOps", "Containers", "CI/CD", "Security"]
+excerpt: "Multi-stage builds, minimal images, health checks, and secrets management — the Docker patterns that separate dev containers from production-grade deployments."
+readTime: "8 min"
+---
+
+## The Problem with Tutorial Docker
+
+Tutorial Docker is: `FROM node:latest`, copy everything, `npm install`, expose port, run. This creates images that are 1.2GB, run as root, have dev dependencies baked in, and leak environment variables into image layers.
+
+Production Docker is a different discipline.
+
+## Multi-Stage Builds
+
+The single most impactful change: separate your build environment from your runtime environment.
+
+```dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --frozen-lockfile
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+USER nextjs
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
+```
+
+Result: build tools, source files, and dev dependencies stay in the `builder` stage and never ship. Final image is 200MB instead of 1.2GB.
+
+## Health Checks
+
+Docker needs to know when your container is actually ready to serve traffic, not just "running":
+
+```dockerfile
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+```
+
+Your app needs a `/health` endpoint:
+
+```typescript
+@Get('/health')
+health() {
+  return {
+    status: 'ok',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  };
+}
+```
+
+Without health checks, Kubernetes and Docker Swarm will route traffic to containers that are still booting or have silently crashed.
+
+## Secrets Management
+
+Never put secrets in environment variables baked into the image. The `ENV` directive writes values into image layers permanently, visible to anyone who pulls the image.
+
+Use Docker secrets or mount at runtime:
+
+```yaml
+services:
+  api:
+    image: my-api:latest
+    secrets:
+      - db_password
+    environment:
+      - NODE_ENV=production
+
+secrets:
+  db_password:
+    external: true
+```
+
+In your app, read from the mounted file:
+
+```typescript
+function getSecret(name: string): string {
+  const secretPath = `/run/secrets/${name}`;
+  if (fs.existsSync(secretPath)) {
+    return fs.readFileSync(secretPath, 'utf8').trim();
+  }
+  return process.env[name.toUpperCase()] ?? '';
+}
+```
+
+## .dockerignore Is Not Optional
+
+Every file you don't explicitly exclude gets sent to the Docker build context. A missing `.dockerignore` sends `node_modules`, `.git`, test files, and local env files to the daemon on every build:
+
+```
+node_modules
+.git
+.env*
+*.test.ts
+coverage
+.next
+dist
+```
+
+This alone can cut build times from 30 seconds to 3 seconds.
+
+## The Production Checklist
+
+- Multi-stage build: build tools don't ship
+- Non-root user: containers don't run as root
+- Health check: orchestrators know container state
+- `.dockerignore`: build context is minimal
+- Pinned base image tags: `node:20.11.0-alpine` not `node:latest`
+- Secrets at runtime: no credentials in image layers
+
+Most production incidents I've seen with containers trace back to missing one of these.
