@@ -1,0 +1,114 @@
+---
+title: "AI Automation Workflows with Python"
+date: "2026-03-22"
+category: "AI & Python"
+tags: ["Python", "AI", "Automation", "FastAPI", "Celery"]
+excerpt: "Lessons from building production AI pipelines — from prompt engineering to async task queues and observability that actually works."
+readTime: "9 min"
+---
+
+## The Problem with Naive AI Integrations
+
+Most AI integrations I see in the wild look like this: a route handler calls the LLM API directly, waits for a response, and returns it. This works in demos. It breaks in production.
+
+The problems: synchronous blocking, no retry logic, no observability, and no way to handle the unpredictable latency of LLM responses without degrading your entire API's response time.
+
+## The Architecture That Works
+
+After building several production AI systems, the pattern that works is: **treat AI calls as async tasks, not synchronous operations**.
+
+```
+Client → FastAPI → Celery Task Queue → AI Worker → Result Store
+                ↘ Return job_id immediately
+```
+
+The client polls for results or uses WebSockets for push updates. The AI worker handles retries, rate limiting, and result caching independently.
+
+## FastAPI + Celery Setup
+
+```python
+from celery import Celery
+from fastapi import FastAPI, BackgroundTasks
+
+app = FastAPI()
+celery = Celery('tasks', broker='redis://localhost:6379/0')
+
+@celery.task(bind=True, max_retries=3)
+def process_with_ai(self, prompt: str, context: dict):
+    try:
+        result = call_llm_api(prompt, context)
+        return {"status": "done", "result": result}
+    except RateLimitError as exc:
+        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+
+@app.post("/analyze")
+async def analyze(request: AnalyzeRequest):
+    task = process_with_ai.delay(request.prompt, request.context)
+    return {"job_id": task.id}
+
+@app.get("/result/{job_id}")
+async def get_result(job_id: str):
+    task = celery.AsyncResult(job_id)
+    return {"status": task.status, "result": task.result}
+```
+
+## Prompt Engineering as Code
+
+I store prompts as versioned Python dataclasses, not hardcoded strings:
+
+```python
+@dataclass
+class PromptTemplate:
+    version: str
+    system: str
+    user_template: str
+
+    def render(self, **kwargs) -> list[dict]:
+        return [
+            {"role": "system", "content": self.system},
+            {"role": "user", "content": self.user_template.format(**kwargs)},
+        ]
+
+ANALYSIS_PROMPT = PromptTemplate(
+    version="v2.1",
+    system="You are a precise data analyst. Return valid JSON only.",
+    user_template="Analyze the following data: {data}\n\nReturn insights as JSON.",
+)
+```
+
+This makes A/B testing prompts, rolling back versions, and tracking which prompt generated which output trivially easy.
+
+## Observability
+
+The most overlooked part of AI systems is observability. Log every prompt, every response, every latency measurement, and every token count. You cannot debug what you cannot see.
+
+```python
+import structlog
+
+log = structlog.get_logger()
+
+def call_llm_with_logging(prompt_template, **kwargs):
+    start = time.monotonic()
+    messages = prompt_template.render(**kwargs)
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages,
+    )
+
+    log.info(
+        "llm_call",
+        prompt_version=prompt_template.version,
+        latency_ms=round((time.monotonic() - start) * 1000),
+        input_tokens=response.usage.prompt_tokens,
+        output_tokens=response.usage.completion_tokens,
+    )
+
+    return response.choices[0].message.content
+```
+
+## What I Learned at Airrived
+
+Building AI pipelines at production scale taught me one hard lesson: **the bottleneck is never what you expect**. We spent weeks optimizing our LLM prompts before realizing the actual bottleneck was our PostgreSQL query that fetched context data — a missing index caused a 2-second delay before the AI call even started.
+
+Profile everything. Optimize ruthlessly. Never assume.

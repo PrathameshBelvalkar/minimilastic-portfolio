@@ -1,0 +1,108 @@
+---
+title: "PostgreSQL Query Optimization in Practice"
+date: "2026-04-05"
+category: "Backend"
+tags: ["PostgreSQL", "Database", "Performance", "SQL", "Indexing"]
+excerpt: "EXPLAIN ANALYZE, index strategies, and the query patterns that actually kill database performance — lessons from profiling real production systems."
+readTime: "9 min"
+---
+
+## The First Rule: Read the Query Plan
+
+Every performance investigation starts with `EXPLAIN ANALYZE`. Not guessing, not adding indexes randomly — reading the plan:
+
+```sql
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT u.email, COUNT(o.id) as order_count
+FROM users u
+LEFT JOIN orders o ON o.user_id = u.id
+WHERE u.created_at > NOW() - INTERVAL '30 days'
+GROUP BY u.id, u.email
+ORDER BY order_count DESC;
+```
+
+The things to look for: **Seq Scan** on large tables (bad), **nested loop** with large row estimates (bad), **actual rows** diverging massively from **estimated rows** (means stale statistics — run `ANALYZE`).
+
+## Index Strategies That Matter
+
+### Partial Indexes
+
+Don't index everything — index the subset you actually query:
+
+```sql
+CREATE INDEX idx_orders_pending
+  ON orders (created_at, user_id)
+  WHERE status = 'pending';
+```
+
+If 90% of your queries filter on `status = 'pending'`, a partial index is 10x smaller and faster than a full index.
+
+### Composite Index Column Order
+
+Column order in composite indexes matters. Put equality columns first, range columns last:
+
+```sql
+CREATE INDEX idx_users_search
+  ON users (organization_id, status, created_at);
+```
+
+A query filtering `organization_id = $1 AND status = $2 AND created_at > $3` uses this index fully. Reversing the order makes the range scan useless.
+
+### Index-Only Scans
+
+If you query the same columns repeatedly, include them in the index:
+
+```sql
+CREATE INDEX idx_posts_listing
+  ON posts (published_at DESC, category_id)
+  INCLUDE (title, slug, excerpt);
+```
+
+Postgres can satisfy the entire query from the index without touching the heap. For read-heavy listing queries, this is transformative.
+
+## The N+1 Problem in Raw SQL
+
+ORMs hide N+1 queries behind abstractions. In raw SQL, you write them yourself:
+
+```sql
+-- Bad: fetching posts then authors in a loop (N+1)
+SELECT * FROM posts WHERE category = 'tech';
+-- then for each post:
+SELECT * FROM users WHERE id = $post.author_id;
+
+-- Good: single join
+SELECT p.*, u.name AS author_name, u.avatar_url
+FROM posts p
+JOIN users u ON u.id = p.author_id
+WHERE p.category = 'tech';
+```
+
+## Connection Pooling Is Not Optional
+
+PostgreSQL has a hard limit on connections. Each connection consumes ~5-10MB of RAM and a background process. Without pooling, a Node.js app with 100 concurrent requests will open 100 connections and crash your database:
+
+```typescript
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+```
+
+For production workloads, PgBouncer in transaction mode is the right answer — it multiplexes hundreds of app connections onto a small fixed pool of Postgres connections.
+
+## The Missing Index Story
+
+At Airrived, we had a 3-second page load caused by a single missing index. The query fetched AI context data for a user session. The table had 2 million rows. Without an index on `session_id`, every request did a full sequential scan.
+
+```sql
+CREATE INDEX CONCURRENTLY idx_session_context_session_id
+  ON ai_context (session_id, created_at DESC);
+```
+
+Page load dropped to 80ms. The AI model was never the bottleneck — the database fetch before it was.
+
+Profile your database queries before optimizing anything else.

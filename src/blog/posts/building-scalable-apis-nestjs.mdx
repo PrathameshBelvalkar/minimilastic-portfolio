@@ -1,0 +1,102 @@
+---
+title: "Building Scalable APIs with NestJS"
+date: "2026-04-10"
+category: "Backend"
+tags: ["NestJS", "Node.js", "REST APIs", "Architecture"]
+excerpt: "How I structure production-grade APIs with authentication, RBAC, validation, and clean module boundaries baked in from day one."
+readTime: "7 min"
+---
+
+## Why NestJS for Production APIs
+
+After building APIs across multiple stacks — Express, FastAPI, Django — NestJS has been my go-to for TypeScript backends that need to scale with a team. The opinionated structure eliminates the "where does this go?" decision fatigue that kills velocity in growing codebases.
+
+The key insight: **structure is a feature**. When a new engineer joins your team, a well-structured NestJS project is self-documenting.
+
+## Module Boundaries First
+
+Before writing a single line of logic, I define module boundaries. Each domain gets its own module:
+
+```
+src/
+├── auth/
+│   ├── auth.module.ts
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   └── strategies/
+├── users/
+│   ├── users.module.ts
+│   ├── users.controller.ts
+│   ├── users.service.ts
+│   └── dto/
+└── app.module.ts
+```
+
+This prevents the spaghetti-import problem that kills Express projects at scale.
+
+## Authentication Layer
+
+I use JWT with a refresh token rotation strategy. The guard pattern in NestJS makes it trivially easy to apply auth globally and override per-route:
+
+```typescript
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+}
+```
+
+Apply globally in `app.module.ts`, then use `@Public()` decorator to opt specific routes out. This is safer than the reverse — everything is protected by default.
+
+## Role-Based Access Control
+
+RBAC is a cross-cutting concern, so I implement it as a custom decorator + guard pair:
+
+```typescript
+export const Roles = (...roles: Role[]) => SetMetadata(ROLES_KEY, roles);
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (!requiredRoles) return true;
+    const { user } = context.switchToHttp().getRequest();
+    return requiredRoles.some((role) => user.roles?.includes(role));
+  }
+}
+```
+
+## Validation with class-validator
+
+Every DTO gets full validation. No raw request body ever touches service logic:
+
+```typescript
+export class CreateUserDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(8)
+  @Matches(/^(?=.*[A-Z])(?=.*\d)/, {
+    message: 'Password must contain uppercase and number',
+  })
+  password: string;
+
+  @IsEnum(Role)
+  role: Role;
+}
+```
+
+Enable `ValidationPipe` globally with `whitelist: true` to strip unknown properties automatically.
+
+## What I Learned
+
+The biggest lesson from building the National Buying Consortium platform: **invest in the data layer early**. A clean NestJS architecture cannot save you from a poorly normalized schema. TypeORM migrations + careful schema design upfront saved us months of painful refactoring.
+
+When in doubt, add another module. Over-modularization is easier to fix than under-modularization.

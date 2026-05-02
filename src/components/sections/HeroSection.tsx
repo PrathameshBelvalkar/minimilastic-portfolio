@@ -15,7 +15,7 @@ export function HeroSection({
 }: Props) {
   const { t } = useTranslation();
   return (
-    <section id="about" className="min-h-[85vh] flex flex-col">
+    <section id="home" className="min-h-[85vh] flex flex-col">
       <motion.div
         variants={staggerContainer}
         initial="initial"

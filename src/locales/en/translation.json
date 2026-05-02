@@ -4,7 +4,8 @@
     "capabilities": "Capabilities",
     "experience": "Experience",
     "projects": "Projects",
-    "contact": "Contact"
+    "contact": "Contact",
+    "blog": "Blog"
   },
   "hero": {
     "whoAmILabel": "Who am I",

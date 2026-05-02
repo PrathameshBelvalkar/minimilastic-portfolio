@@ -1,0 +1,106 @@
+---
+title: "TypeScript Patterns That Eliminate Runtime Bugs"
+date: "2026-04-28"
+category: "Frontend"
+tags: ["TypeScript", "Type Safety", "Patterns", "DX"]
+excerpt: "Advanced TypeScript techniques I use daily — discriminated unions, branded types, and template literals — that catch entire classes of bugs at compile time."
+readTime: "7 min"
+---
+
+## The Gap Between Basic and Advanced TypeScript
+
+Most TypeScript codebases I've seen are just JavaScript with type annotations bolted on. They use `any` liberally, cast with `as` frequently, and miss the patterns that make TypeScript genuinely powerful.
+
+The patterns below are the ones that shifted my thinking from "TypeScript is a linter" to "TypeScript is a design tool."
+
+## Discriminated Unions for State Machines
+
+Stop using boolean flags and nullable fields to represent state. Use discriminated unions:
+
+```typescript
+type RequestState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; error: string };
+```
+
+Now TypeScript enforces correctness. You cannot access `data` unless you've narrowed to the `success` case:
+
+```typescript
+function render<T>(state: RequestState<T>) {
+  switch (state.status) {
+    case 'success':
+      return state.data; // TypeScript knows this exists
+    case 'error':
+      return state.error; // TypeScript knows this exists
+    default:
+      return null;
+  }
+}
+```
+
+No more `data?.something` defensive drilling throughout your UI.
+
+## Branded Types to Prevent ID Mixups
+
+This bug ships to production constantly:
+
+```typescript
+function getUser(id: string) { /* ... */ }
+function getOrder(id: string) { /* ... */ }
+
+getUser(orderId); // TypeScript says: fine. Your API says: 404.
+```
+
+Branded types fix this at zero runtime cost:
+
+```typescript
+type UserId = string & { readonly _brand: 'UserId' };
+type OrderId = string & { readonly _brand: 'OrderId' };
+
+function createUserId(id: string): UserId {
+  return id as UserId;
+}
+
+function getUser(id: UserId) { /* ... */ }
+
+getUser(orderId); // TypeScript error: Argument of type 'OrderId' is not assignable to type 'UserId'
+```
+
+## Template Literal Types for API Routes
+
+Define API routes as a type, not a string convention:
+
+```typescript
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+type ApiVersion = 'v1' | 'v2';
+type ApiRoute = `/${ApiVersion}/${string}`;
+
+function apiCall(method: HttpMethod, route: ApiRoute) { /* ... */ }
+
+apiCall('GET', '/v1/users'); // valid
+apiCall('GET', '/users'); // TypeScript error: missing version prefix
+apiCall('FETCH', '/v1/users'); // TypeScript error: invalid method
+```
+
+## `satisfies` Operator for Config Objects
+
+The `satisfies` operator validates a value against a type without widening it:
+
+```typescript
+const config = {
+  db: { host: 'localhost', port: 5432 },
+  redis: { host: 'localhost', port: 6379 },
+} satisfies Record<string, { host: string; port: number }>;
+
+config.db.port.toFixed(); // Works — port is still typed as `number`, not `string | number`
+```
+
+Before `satisfies`, you had to choose between type checking and inference. Now you get both.
+
+## The Mental Model Shift
+
+TypeScript at its best encodes business rules into the type system. Not "this is a string" but "this is a user ID that came from our database, not just any string." When your types model your domain accurately, entire categories of bugs become impossible by construction.
+
+Make the invalid states unrepresentable.

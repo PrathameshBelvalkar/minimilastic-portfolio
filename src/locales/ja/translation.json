@@ -4,7 +4,8 @@
     "capabilities": "スキル",
     "experience": "経歴",
     "projects": "プロジェクト",
-    "contact": "お問い合わせ"
+    "contact": "お問い合わせ",
+    "blog": "ブログ"
   },
   "hero": {
     "whoAmILabel": "私について",
