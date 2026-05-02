@@ -70,6 +70,17 @@
         ]
       }
     </script>
+    <script>
+      (function () {
+        try {
+          var k = 'portfolio-theme';
+          var t = localStorage.getItem(k);
+          var r = document.documentElement;
+          if (t === 'dark') r.classList.add('dark');
+          else if (t === 'evening') r.classList.add('evening');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
