@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "ホーム",
     "about": "概要",
     "capabilities": "スキル",
     "experience": "経歴",
@@ -11,7 +12,9 @@
     "whoAmILabel": "私について",
     "intro": "スケーラブルなバックエンドシステムと高性能なウェブアプリケーションの構築を専門とするフルスタック開発者です。ビジネス目標に沿い、優れたユーザー体験を提供します。",
     "subIntro": "現在、Airrivedにてソフトウェア開発とAIの融合を探求しています。",
-    "scrollCtaLabel": "スクロール"
+    "scrollCtaLabel": "スクロール",
+    "trendingLabel": "トレンド",
+    "trendingAllCta": "すべての記事"
   },
   "about": {
     "sectionLabel": "概要 / プロフィール",

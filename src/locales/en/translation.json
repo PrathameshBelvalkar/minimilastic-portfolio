@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Home",
     "about": "About",
     "capabilities": "Capabilities",
     "experience": "Experience",
@@ -11,7 +12,9 @@
     "whoAmILabel": "Who am I",
     "intro": "Full Stack Developer specializing in building scalable backend systems and high-performance web applications that align with business goals and deliver excellent user experiences.",
     "subIntro": "Currently exploring the intersection of AI and Software Development at Airrived.",
-    "scrollCtaLabel": "Scroll"
+    "scrollCtaLabel": "Scroll",
+    "trendingLabel": "Trending",
+    "trendingAllCta": "All posts"
   },
   "about": {
     "sectionLabel": "About / Profile",

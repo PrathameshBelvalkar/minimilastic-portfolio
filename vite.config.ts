@@ -13,6 +13,26 @@ export default defineConfig(({mode}) => {
   const siteUrl = (env.VITE_SITE_URL || 'https://prathameshbelvalkar.in').replace(/\/+$/, '');
   return {
     plugins: [
+      {
+        name: 'mdx-raw-loader',
+        enforce: 'pre',
+        resolveId(id, importer) {
+          if (id.endsWith('?raw') && id.slice(0, -4).endsWith('.mdx')) {
+            const cleanPath = id.slice(0, -4);
+            const resolved = importer
+              ? path.resolve(path.dirname(importer.split('?')[0]), cleanPath)
+              : path.resolve(cleanPath);
+            return `\0mdx-raw:${resolved}`;
+          }
+        },
+        load(id) {
+          if (id.startsWith('\0mdx-raw:')) {
+            const filePath = id.slice('\0mdx-raw:'.length);
+            const content = fs.readFileSync(filePath, 'utf8');
+            return `export default ${JSON.stringify(content)}`;
+          }
+        },
+      },
       mdx({
         remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
         rehypePlugins: [rehypeHighlight],

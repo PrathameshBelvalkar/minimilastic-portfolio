@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { BackToTopButton } from './BackToTopButton';
 import { Footer } from './Footer';
+import { MobileBottomNav } from './MobileBottomNav';
 import { MobileMenu } from './MobileMenu';
 import { Navbar } from './Navbar';
 import { portfolioData } from '../data';
@@ -58,7 +59,7 @@ export function Layout({ children }: Props) {
   }, [currentLang]);
 
   return (
-    <div className="min-h-screen hero-pattern transition-colors duration-300">
+    <div className="min-h-screen hero-pattern transition-colors duration-300 pb-[4.75rem] md:pb-0">
       <Navbar
         isScrolled={isScrolled}
         isMenuOpen={isMenuOpen}
@@ -81,6 +82,8 @@ export function Layout({ children }: Props) {
         navItems={portfolioData.navItems}
         onNavigate={() => setIsMenuOpen(false)}
       />
+
+      {!isMenuOpen ? <MobileBottomNav /> : null}
 
       {children ?? <Outlet />}
 

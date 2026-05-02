@@ -70,7 +70,7 @@ export function Navbar({
               exit={{ opacity: 0, y: -5 }}
             >
               <Link
-                to="/#home"
+                to="/"
                 className="font-bold text-xs uppercase tracking-widest hover:opacity-50 transition-all block"
               >
                 {brandName}

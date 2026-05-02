@@ -16,7 +16,7 @@ export function BackToTopButton({ show, disabled, onClick }: Props) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           onClick={onClick}
-          className="fixed bottom-8 right-8 z-[60] p-4 bg-[var(--color-text)] text-[var(--color-bg)] rounded-full shadow-xl transition-shadow duration-200"
+          className="fixed bottom-[4.75rem] right-6 z-[60] p-4 bg-[var(--color-text)] text-[var(--color-bg)] rounded-full shadow-xl transition-shadow duration-200 md:bottom-8 md:right-8"
           aria-label="Back to top"
         >
           <ArrowUp size={20} />
