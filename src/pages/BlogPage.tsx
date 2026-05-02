@@ -3,10 +3,13 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
 import { blogCategories, blogPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
+import { TrendingBlogCarousel } from '../components/blog/TrendingBlogCarousel';
 
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
+
+  const trendingPosts = useMemo(() => blogPosts.slice(0, 5), [blogPosts]);
 
   const filtered = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
@@ -29,14 +32,19 @@ export default function BlogPage() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="flex flex-col gap-8"
       >
-        <div className="flex flex-col gap-6 border-b border-theme pb-12">
-          <span className="section-label">Writing</span>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[0.95] uppercase">
-            Notes &<br />Articles
-          </h1>
-          <p className="text-lg opacity-60 font-light max-w-lg leading-relaxed">
-            Thoughts on backend engineering, AI development, and the craft of building software that lasts.
-          </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-20 items-start border-b border-theme pb-12">
+          <div className="flex flex-col gap-6 min-w-0">
+            <span className="section-label">Writing</span>
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[0.95] uppercase">
+              Notes &<br />Articles
+            </h1>
+            <p className="text-lg opacity-60 font-light max-w-lg leading-relaxed">
+              Thoughts on backend engineering, AI development, and the craft of building software that lasts.
+            </p>
+          </div>
+          <div className="hidden lg:block min-w-0 w-full lg:pt-1">
+            <TrendingBlogCarousel posts={trendingPosts} />
+          </div>
         </div>
 
         <div className="flex flex-col gap-6">

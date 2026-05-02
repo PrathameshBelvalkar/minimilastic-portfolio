@@ -265,20 +265,20 @@ export default function BlogPostPage() {
   }
 
   return (
-    <main className="px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto">
+    <main className="px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto flex flex-col gap-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col gap-8"
       >
         <Link to="/blog" className="flex items-center gap-2 section-label hover:opacity-100 transition-opacity self-start">
           <ArrowLeft size={12} /> Back to Blog
         </Link>
+      </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,640px)_200px] xl:grid-cols-[minmax(0,680px)_220px] gap-12 xl:gap-20">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,640px)_200px] xl:grid-cols-[minmax(0,680px)_220px] gap-12 xl:gap-20">
           <div className="flex flex-col gap-6">
-            <div className="border-b border-theme pb-8 flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
                 <span
                   className="section-label px-2 py-1 rounded border"
@@ -335,8 +335,7 @@ export default function BlogPostPage() {
               {loading ? null : <TableOfContents items={toc} activeId={activeId} />}
             </div>
           </aside>
-        </div>
-      </motion.div>
+      </div>
     </main>
   );
 }
