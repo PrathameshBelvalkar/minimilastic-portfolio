@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { ProjectModal, type Project } from '../components/ProjectModal';
 import { AboutProfileSection } from '../components/sections/AboutProfileSection';
 import { CapabilitiesSection } from '../components/sections/CapabilitiesSection';
@@ -10,6 +11,7 @@ import { portfolioData } from '../data';
 import { applyProjectSeo } from '../seo';
 
 export default function HomePage() {
+  const { hash } = useLocation();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -32,6 +34,14 @@ export default function HomePage() {
   useEffect(() => {
     applyProjectSeo(selectedProject);
   }, [selectedProject]);
+
+  useEffect(() => {
+    const id = hash.replace(/^#/, '');
+    if (!id) return;
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }, [hash]);
 
   return (
     <>

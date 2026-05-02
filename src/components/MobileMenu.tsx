@@ -42,14 +42,14 @@ export function MobileMenu({ isMenuOpen, navItems, onNavigate }: Props) {
                 {t(navKeyByItem[item] ?? item)}
               </Link>
             ) : (
-              <a
+              <Link
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                to={`/#${item.toLowerCase()}`}
                 onClick={onNavigate}
                 className="text-4xl font-light tracking-tight hover:opacity-50 transition-opacity"
               >
                 {t(navKeyByItem[item] ?? item)}
-              </a>
+              </Link>
             )
           )}
         </motion.div>

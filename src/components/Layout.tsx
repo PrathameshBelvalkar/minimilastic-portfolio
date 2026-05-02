@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import { BackToTopButton } from './BackToTopButton';
 import { Footer } from './Footer';
 import { MobileMenu } from './MobileMenu';
@@ -13,6 +13,7 @@ type Props = {
 };
 
 export function Layout({ children }: Props) {
+  const { pathname } = useLocation();
   const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -71,6 +72,8 @@ export function Layout({ children }: Props) {
         languages={portfolioData.languages}
         currentLang={currentLang}
         setCurrentLang={setCurrentLang}
+        showLanguageSelector={!pathname.startsWith('/blog')}
+        showBrandLinkAlways={pathname.startsWith('/blog')}
       />
 
       <MobileMenu
