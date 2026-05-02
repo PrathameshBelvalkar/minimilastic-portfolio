@@ -7,6 +7,7 @@ import { ContactSection } from '../components/sections/ContactSection';
 import { ExperienceSection } from '../components/sections/ExperienceSection';
 import { HeroSection } from '../components/sections/HeroSection';
 import { ProjectsSection } from '../components/sections/ProjectsSection';
+import { blogPosts } from '../blog';
 import { portfolioData } from '../data';
 import { applyProjectSeo } from '../seo';
 
@@ -52,6 +53,7 @@ export default function HomePage() {
           hideScrollHint={isScrolled}
           titleLines={portfolioData.hero.titleLines}
           scrollCtaHref={portfolioData.hero.scrollCtaHref}
+          trendingPosts={blogPosts.slice(0, 5)}
         />
         <AboutProfileSection
           email={portfolioData.aboutProfile.email}

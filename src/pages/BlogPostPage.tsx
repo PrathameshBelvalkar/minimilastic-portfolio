@@ -1,10 +1,11 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Check, Copy } from 'lucide-react';
 import { motion } from 'motion/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent } from '../blog';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
+import NotFoundPage from './NotFoundPage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MDXComponents = Record<string, React.ComponentType<any>>;
@@ -27,6 +28,38 @@ function getTextContent(node: React.ReactNode): string {
   if (React.isValidElement(node))
     return getTextContent((node.props as { children?: React.ReactNode }).children);
   return '';
+}
+
+function MdxPreWithCopy({ children, ...props }: React.ComponentProps<'pre'>) {
+  const [copied, setCopied] = useState(false);
+  const raw = getTextContent(children);
+
+  const handleCopy = () => {
+    void navigator.clipboard.writeText(raw).then(() => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="relative mb-8">
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="absolute top-2.5 right-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-theme bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-accent)] hover:border-[color-mix(in_oklab,var(--color-accent)_35%,transparent)]"
+        aria-label={copied ? 'Copied' : 'Copy code'}
+      >
+        {copied ? <Check size={14} strokeWidth={2} aria-hidden /> : <Copy size={14} strokeWidth={2} aria-hidden />}
+      </button>
+      <pre
+        className="overflow-x-auto rounded-xl border border-theme px-5 pt-11 pb-4 text-[0.82rem] leading-[1.75] font-mono"
+        style={{ background: 'var(--color-card-bg)' }}
+        {...props}
+      >
+        {children}
+      </pre>
+    </div>
+  );
 }
 
 function buildMdxComponents(): MDXComponents {
@@ -125,15 +158,7 @@ function buildMdxComponents(): MDXComponents {
         const code = String(child?.props?.children ?? '').trim();
         return <MermaidDiagram code={code} />;
       }
-      return (
-        <pre
-          className="overflow-x-auto rounded-xl border border-theme px-5 py-4 mb-8 text-[0.82rem] leading-[1.75] font-mono"
-          style={{ background: 'var(--color-card-bg)' }}
-          {...props}
-        >
-          {children}
-        </pre>
-      );
+      return <MdxPreWithCopy {...props}>{children}</MdxPreWithCopy>;
     },
     img: ({ src, alt, ...props }) => (
       <figure className="my-8">
@@ -252,31 +277,38 @@ export default function BlogPostPage() {
 
   useEffect(() => {
     if (!toc.length) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length > 0) setActiveId(visible[0].target.id);
-      },
-      { rootMargin: '-80px 0px -65% 0px', threshold: 0 }
-    );
-    toc.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+
+    const updateActive = () => {
+      const innerH = window.innerHeight;
+      const line = Math.max(112, innerH * 0.33);
+      const docEl = document.documentElement;
+      const scrollRoom = docEl.scrollHeight - innerH;
+      const nearBottom =
+        scrollRoom > 96 && window.scrollY + innerH >= docEl.scrollHeight - 96;
+
+      let current = toc[0].id;
+      if (nearBottom) {
+        current = toc[toc.length - 1].id;
+      } else {
+        for (const { id } of toc) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= line) current = id;
+        }
+      }
+      setActiveId(current);
+    };
+
+    updateActive();
+    window.addEventListener('scroll', updateActive, { passive: true });
+    window.addEventListener('resize', updateActive);
+    return () => {
+      window.removeEventListener('scroll', updateActive);
+      window.removeEventListener('resize', updateActive);
+    };
   }, [toc]);
 
   if (!post) {
-    return (
-      <main className="px-6 md:px-12 pt-30 pb-24 max-w-7xl mx-auto">
-        <div className="flex flex-col gap-6 items-start">
-          <Link to="/blog" className="flex items-center gap-2 section-label hover:opacity-100 transition-opacity">
-            <ArrowLeft size={12} /> Back to Blog
-          </Link>
-          <p className="opacity-40 mt-8">Post not found.</p>
-        </div>
-      </main>
-    );
+    return <NotFoundPage />;
   }
 
   return (

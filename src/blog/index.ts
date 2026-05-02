@@ -31,3 +31,5 @@ export async function getBlogPostComponent(slug: string): Promise<ComponentType 
   const mod = modules[key];
   return mod ? mod.default : null;
 }
+
+export { getMdxLeadPreviewMarkdown } from './mdxLead';
