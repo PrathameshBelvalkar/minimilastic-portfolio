@@ -1,14 +1,19 @@
 import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import { blogCategories, blogPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
 import { TrendingBlogCarousel } from '../components/blog/TrendingBlogCarousel';
+import { applyBlogListingSeo } from '../seo';
 
 const PAGE_SIZE = 3;
 
 export default function BlogPage() {
+  useEffect(() => {
+    applyBlogListingSeo();
+  }, []);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') ?? '';
   const activeCategory = searchParams.get('cat') ?? 'All';

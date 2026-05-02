@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent } from '../blog';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
+import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MDXComponents = Record<string, React.ComponentType<any>>;
@@ -220,6 +221,11 @@ export default function BlogPostPage() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const post = blogPosts.find((p) => p.slug === slug);
+
+  useEffect(() => {
+    if (post) applyBlogPostSeo(post);
+    else applyDefaultSeo();
+  }, [post]);
 
   useEffect(() => {
     if (!slug) return;
