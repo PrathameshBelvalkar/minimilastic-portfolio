@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent } from '../blog';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
+import SittingReading from '../components/illustrations/SittingReading';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 import NotFoundPage from './NotFoundPage';
 

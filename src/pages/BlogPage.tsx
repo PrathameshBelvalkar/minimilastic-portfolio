@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import Readingman from '../components/illustrations/Readingman';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
