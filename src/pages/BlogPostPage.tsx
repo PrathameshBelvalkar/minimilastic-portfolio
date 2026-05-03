@@ -391,10 +391,6 @@ export default function BlogPostPage() {
           </aside>
       </div>
     </main>
-
-    <div className="hidden lg:block fixed bottom-0 right-0 pointer-events-none select-none z-0" aria-hidden>
-      <SittingReading className="w-64 h-64 opacity-10" />
-    </div>
     </>
   );
 }
