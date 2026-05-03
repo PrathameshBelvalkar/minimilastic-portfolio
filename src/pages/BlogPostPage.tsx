@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent } from '../blog';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
-import SittingReading from '../components/illustrations/SittingReading';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 import NotFoundPage from './NotFoundPage';
 
@@ -391,10 +390,6 @@ export default function BlogPostPage() {
           </aside>
       </div>
     </main>
-
-    <div className="hidden lg:block fixed bottom-0 right-0 pointer-events-none select-none z-0" aria-hidden>
-      <SittingReading className="w-64 h-64 opacity-10" />
-    </div>
     </>
   );
 }

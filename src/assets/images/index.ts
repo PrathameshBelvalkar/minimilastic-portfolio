@@ -1,7 +1,7 @@
-import nbcMockup from './NBC_Mockup.png';
-import regridParcel from './regrid_parcel.png';
-import siloStream from './silo_stream.png';
-import subtitleMaker from './subtitle_maker.png';
+import nbcMockup from './NBC_Mockup.webp';
+import regridParcel from './regrid_parcel.webp';
+import siloStream from './silo_stream.webp';
+import subtitleMaker from './subtitle_maker.webp';
 
 export const projectImages = {
   NBC_Mockup: nbcMockup,

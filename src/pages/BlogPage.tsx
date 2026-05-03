@@ -1,5 +1,4 @@
 import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
-import Readingman from '../components/illustrations/Readingman';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
@@ -212,10 +211,6 @@ export default function BlogPage() {
         </AnimatePresence>
       </motion.div>
     </main>
-
-    <div className="hidden lg:block fixed bottom-0 right-0 pointer-events-none select-none z-0" aria-hidden>
-      <Readingman className="w-64 h-64 opacity-10" />
-    </div>
   </>
   );
 }
