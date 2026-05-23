@@ -26,6 +26,29 @@ export const blogPosts: BlogPost[] = Object.entries(modules)
 
 export const blogCategories = ['All', ...Array.from(new Set(blogPosts.map((p) => p.category)))];
 
+function relatedScore(current: BlogPost, candidate: BlogPost): number {
+  let score = 0;
+  if (candidate.category === current.category) score += 10;
+  for (const tag of candidate.tags) {
+    if (current.tags.includes(tag)) score += 1;
+  }
+  return score;
+}
+
+export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
+  const current = blogPosts.find((p) => p.slug === slug);
+  if (!current) return [];
+
+  const others = blogPosts.filter((p) => p.slug !== slug);
+  return [...others]
+    .sort((a, b) => {
+      const scoreDiff = relatedScore(current, b) - relatedScore(current, a);
+      if (scoreDiff !== 0) return scoreDiff;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    })
+    .slice(0, limit);
+}
+
 export async function getBlogPostComponent(slug: string): Promise<ComponentType | null> {
   const key = `./posts/${slug}.mdx`;
   const mod = modules[key];
