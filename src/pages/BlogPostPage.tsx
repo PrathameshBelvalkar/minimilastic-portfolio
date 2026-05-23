@@ -1,10 +1,11 @@
 import { ArrowLeft, Check, Copy } from 'lucide-react';
 import { motion } from 'motion/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
-import { blogPosts, getBlogPostComponent } from '../blog';
+import { blogPosts, getBlogPostComponent, getRelatedPosts } from '../blog';
+import { BlogCard } from '../components/blog/BlogCard';
+import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
-import SittingReading from '../components/illustrations/SittingReading';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 import NotFoundPage from './NotFoundPage';
 
@@ -247,6 +248,7 @@ export default function BlogPostPage() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const post = blogPosts.find((p) => p.slug === slug);
+  const relatedPosts = useMemo(() => (slug ? getRelatedPosts(slug, 3) : []), [slug]);
 
   useEffect(() => {
     if (post) applyBlogPostSeo(post);
@@ -382,6 +384,8 @@ export default function BlogPostPage() {
                 <p className="opacity-40">Failed to load post content.</p>
               )}
             </div>
+
+            {!loading && post && <BlogCommentsSection postSlug={post.slug} />}
           </div>
 
           <aside className="hidden lg:block">
@@ -390,6 +394,24 @@ export default function BlogPostPage() {
             </div>
           </aside>
       </div>
+
+      {!loading && relatedPosts.length > 0 && (
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-4 pt-12 flex flex-col gap-8"
+        >
+          <span className="section-label" style={{ fontSize: '11px' }}>
+            More like this
+          </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {relatedPosts.map((related, i) => (
+              <BlogCard key={related.slug} post={related} index={i} />
+            ))}
+          </div>
+        </motion.section>
+      )}
     </main>
     </>
   );

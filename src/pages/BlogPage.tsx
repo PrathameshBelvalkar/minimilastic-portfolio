@@ -66,7 +66,7 @@ export default function BlogPage() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="flex flex-col gap-8"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-20 items-start border-b border-theme pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-20 items-start pb-12">
           <div className="flex flex-col gap-6 min-w-0">
             <span className="section-label">Writing</span>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[0.95] uppercase">
@@ -147,7 +147,7 @@ export default function BlogPage() {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 pt-4 border-t border-theme">
+                <div className="flex items-center justify-center gap-2 pt-4 ">
                   <button
                     onClick={() => setParam({ page: String(Math.max(1, currentPage - 1)) })}
                     disabled={currentPage === 1}
