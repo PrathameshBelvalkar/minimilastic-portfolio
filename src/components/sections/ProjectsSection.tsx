@@ -9,6 +9,13 @@ type Props = {
   onSelectProject: (p: Project) => void;
 };
 
+function getProjectImageSrc(imageKey?: string) {
+  if (imageKey && imageKey in projectImages) {
+    return projectImages[imageKey as keyof typeof projectImages];
+  }
+  return projectImageKeys[0] ? projectImages[projectImageKeys[0]] : undefined;
+}
+
 export function ProjectsSection({ projects, onSelectProject }: Props) {
   const { t } = useTranslation();
 
@@ -37,6 +44,7 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
           {projects.map((project, i) => {
             const key = projectKeyByTitle[project.title];
             const desc = key ? t(`projects.${key}.desc`) : project.desc;
+            const imageSrc = getProjectImageSrc(project.image);
 
             return (
             <motion.div
@@ -45,25 +53,16 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
               onClick={() => onSelectProject(project)}
               className="flex flex-col gap-6 cursor-pointer group"
             >
-              <div className="relative aspect-[4/3] bg-card-theme flex items-center justify-center border border-theme overflow-hidden">
-                {((project.image &&
-                  projectImages[project.image as keyof typeof projectImages]) ||
-                  (projectImageKeys[0] && projectImages[projectImageKeys[0]])) && (
+              <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-theme bg-[#ececef] transition-colors duration-300 group-hover:border-[var(--color-text-muted)]">
+                {imageSrc && (
                   <img
-                    src={
-                      (project.image &&
-                        projectImages[project.image as keyof typeof projectImages]) ||
-                      projectImages[projectImageKeys[0]]
-                    }
+                    src={imageSrc}
                     alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-opacity"
+                    className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                     loading="lazy"
                     decoding="async"
                   />
                 )}
-                {/* <span className="font-mono text-[10px] opacity-20 uppercase tracking-[0.2em]">
-                  Preview / {project.title}
-                </span> */}
               </div>
               <div className="flex justify-between items-start">
                 <div className="flex flex-col gap-2">
@@ -83,4 +82,3 @@ export function ProjectsSection({ projects, onSelectProject }: Props) {
     </section>
   );
 }
-
