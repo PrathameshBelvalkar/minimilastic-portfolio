@@ -81,7 +81,7 @@ export default function BlogPage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 mb-4">
           <div className="relative">
             <Search
               size={14}

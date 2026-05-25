@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import type { BlogPost } from '../../blog';
 import { fadeInUp, staggerContainer } from '../motionVariants';
@@ -30,10 +30,12 @@ export function HeroSection({
         }
       >
         <motion.div
-          variants={staggerContainer} 
+          variants={staggerContainer}
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
+          layout
+          transition={{ layout: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}
           className="relative flex flex-col gap-12 min-w-0 lg:py-1"
         >
           <motion.h1 variants={fadeInUp} className="display-title">
@@ -50,17 +52,24 @@ export function HeroSection({
             <p className="text-lg font-normal opacity-60">{t('hero.subIntro')}</p>
           </motion.div>
 
-          <AnimatePresence>
-            {!hideScrollHint && (
+          <div
+            className="grid transition-[grid-template-rows] duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{ gridTemplateRows: hideScrollHint ? '0fr' : '1fr' }}
+          >
+            <div className="min-h-0 overflow-hidden">
               <motion.a
                 variants={fadeInUp}
                 href={scrollCtaHref}
-                className="mt-6 md:mt-8 lg:mt-10 inline-flex items-center gap-4 self-start opacity-60 hover:opacity-100 transition-opacity"
+                animate={{
+                  opacity: hideScrollHint ? 0 : 0.6,
+                  y: hideScrollHint ? -10 : 0,
+                }}
+                whileHover={hideScrollHint ? undefined : { opacity: 1 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-6 md:mt-8 lg:mt-10 inline-flex items-center gap-4 self-start transition-opacity"
                 aria-label="Scroll to bottom"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.25 }}
+                tabIndex={hideScrollHint ? -1 : 0}
+                aria-hidden={hideScrollHint}
               >
                 <motion.div
                   aria-hidden="true"
@@ -68,14 +77,22 @@ export function HeroSection({
                 >
                   <motion.div
                     className="w-1 h-2 rounded-full bg-[var(--color-text-secondary)]"
-                    animate={{ y: [0, 8, 0], opacity: [0.9, 0.35, 0.9] }}
-                    transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                    animate={
+                      hideScrollHint
+                        ? { y: 0, opacity: 0.35 }
+                        : { y: [0, 8, 0], opacity: [0.9, 0.35, 0.9] }
+                    }
+                    transition={
+                      hideScrollHint
+                        ? { duration: 0.35, ease: [0.22, 1, 0.36, 1] }
+                        : { duration: 1.4, repeat: Infinity, ease: 'easeInOut' }
+                    }
                   />
                 </motion.div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{t('hero.scrollCtaLabel')}</span>
               </motion.a>
-            )}
-          </AnimatePresence>
+            </div>
+          </div>
         </motion.div>
 
         {showTrending && trendingPosts && (
