@@ -16,15 +16,19 @@ export function AboutProfileSection({
   const paragraphs = t('about.paragraphs', { returnObjects: true }) as string[];
 
   return (
-    <section id="about" className="mb-24 pt-8 md:pt-12">
+    <section id="about" className="mb-24 pt-6 md:pt-8 lg:pt-12">
       <motion.div
+        layout
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        transition={{
+          duration: 0.8,
+          layout: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+        }}
       >
         <h2 className="section-label mb-12">{t('about.sectionLabel')}</h2>
-        <div className="w-full h-[1px] bg-theme mb-12 md:mb-24 opacity-20" />
+        {/* <div className="w-full h-[1px] bg-theme mb-12 md:mb-24 opacity-20" /> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           <div className="flex flex-col justify-between gap-12 lg:gap-24">

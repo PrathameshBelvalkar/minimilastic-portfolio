@@ -22,7 +22,7 @@ export function CapabilitiesSection({ capabilities }: Props) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="flex flex-col gap-24"
+        className="flex flex-col gap-8"
       >
         <div className="flex flex-col gap-6">
           <h2 className="section-label">{t('capabilities.sectionHeading')}</h2>

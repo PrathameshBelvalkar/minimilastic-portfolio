@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { ProjectModal, type Project } from '../components/ProjectModal';
@@ -18,7 +19,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 72);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -49,16 +50,22 @@ export default function HomePage() {
       <ProjectModal selectedProject={selectedProject} onClose={() => setSelectedProject(null)} />
 
       <main className="px-6 md:px-12 pt-30 max-w-7xl mx-auto">
-        <HeroSection
-          hideScrollHint={isScrolled}
-          titleLines={portfolioData.hero.titleLines}
-          scrollCtaHref={portfolioData.hero.scrollCtaHref}
-          trendingPosts={blogPosts.slice(0, 5)}
-        />
-        <AboutProfileSection
-          email={portfolioData.aboutProfile.email}
-          linkedinHref={portfolioData.aboutProfile.linkedinHref}
-        />
+        <motion.div
+          layout
+          transition={{ layout: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}
+          className="flex flex-col"
+        >
+          <HeroSection
+            hideScrollHint={isScrolled}
+            titleLines={portfolioData.hero.titleLines}
+            scrollCtaHref={portfolioData.hero.scrollCtaHref}
+            trendingPosts={blogPosts.slice(0, 5)}
+          />
+          <AboutProfileSection
+            email={portfolioData.aboutProfile.email}
+            linkedinHref={portfolioData.aboutProfile.linkedinHref}
+          />
+        </motion.div>
         <ExperienceSection experience={portfolioData.experience} />
         <ProjectsSection
           projects={portfolioData.projects}
