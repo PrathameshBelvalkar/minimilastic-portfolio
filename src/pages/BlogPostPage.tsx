@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent, getRelatedPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
+import { BlogPostShare } from '../components/blog/BlogPostShare';
 import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
@@ -327,7 +328,13 @@ export default function BlogPostPage() {
         </Link>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,640px)_200px] xl:grid-cols-[minmax(0,680px)_220px] gap-12 xl:gap-20">
+      <div className="grid grid-cols-1 lg:grid-cols-[auto_minmax(0,640px)_200px] xl:grid-cols-[auto_minmax(0,680px)_220px] gap-12 xl:gap-20">
+          <aside className="hidden lg:block">
+            <div className="sticky top-28">
+              <BlogPostShare title={post.title} slug={post.slug} />
+            </div>
+          </aside>
+
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
@@ -369,6 +376,10 @@ export default function BlogPostPage() {
                   ))}
                 </div>
               </div>
+            </div>
+
+            <div className="lg:hidden pt-4">
+              <BlogPostShare title={post.title} slug={post.slug} />
             </div>
 
             <div ref={contentRef}>

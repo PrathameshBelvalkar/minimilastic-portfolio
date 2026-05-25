@@ -21,12 +21,12 @@ export function HeroSection({
   const showTrending = Boolean(trendingPosts?.length);
 
   return (
-    <section id="home" className="min-h-[85vh] flex flex-col">
+    <section id="home" className="flex flex-col lg:min-h-[85vh]">
       <div
         className={
           showTrending
-            ? 'relative flex flex-1 flex-col gap-12 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(26rem,1fr)] lg:items-stretch lg:gap-x-8 xl:gap-x-12 2xl:gap-x-12 lg:min-h-[min(85vh,56rem)]'
-            : 'relative flex flex-1 flex-col gap-12'
+            ? 'relative flex flex-col gap-12 lg:flex-1 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(26rem,1fr)] lg:items-stretch lg:gap-x-8 xl:gap-x-12 2xl:gap-x-12 lg:min-h-[min(85vh,56rem)]'
+            : 'relative flex flex-col gap-12 lg:flex-1'
         }
       >
         <motion.div
@@ -55,7 +55,7 @@ export function HeroSection({
               <motion.a
                 variants={fadeInUp}
                 href={scrollCtaHref}
-                className="mt-10 inline-flex items-center gap-4 self-start opacity-60 hover:opacity-100 transition-opacity"
+                className="mt-6 md:mt-8 lg:mt-10 inline-flex items-center gap-4 self-start opacity-60 hover:opacity-100 transition-opacity"
                 aria-label="Scroll to bottom"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}

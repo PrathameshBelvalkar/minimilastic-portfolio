@@ -33,7 +33,7 @@ export function ExperienceSection({ experience }: Props) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="flex flex-col gap-24"
+        className="flex flex-col gap-8"
       >
         <h2 className="section-label">{t('experience.sectionHeading')}</h2>
 
