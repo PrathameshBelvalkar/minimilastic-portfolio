@@ -7,6 +7,7 @@ import rehypeHighlight from 'rehype-highlight';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import {defineConfig, loadEnv} from 'vite';
+import {seoHtmlPlugin} from './vite-plugins/generate-seo-html';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
@@ -39,6 +40,7 @@ export default defineConfig(({mode}) => {
       }),
       react(),
       tailwindcss(),
+      seoHtmlPlugin(siteUrl, __dirname),
       {
         name: 'generate-sitemap',
         buildStart() {
