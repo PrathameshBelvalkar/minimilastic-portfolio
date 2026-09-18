@@ -8,7 +8,11 @@ import {
 import { AssistantModal } from "@/src/components/assistant-ui/elements/assistant-modal.aui";
 import { TooltipProvider } from "@/src/components/ui/tooltip";
 import type { BlogPost } from "@/src/blog";
-import { SEARCHING_STATUS, answerFromPost } from "@/src/lib/postQA";
+import {
+  LOADING_STATUS,
+  formatAssistantError,
+  streamAnswerFromPost,
+} from "@/src/lib/postQA";
 
 type BlogAssistantProps = {
   post: BlogPost;
@@ -23,39 +27,51 @@ function getMessageText(message: ThreadMessage): string {
     .trim();
 }
 
-function createAdapter(excerpt: string): ChatModelAdapter {
+function buildPostFallback(post: BlogPost): string {
+  return [`Title: ${post.title}`, post.excerpt].filter(Boolean).join("\n\n");
+}
+
+function createAdapter(postContent: string): ChatModelAdapter {
   return {
-    async *run({ messages }) {
+    async *run({ messages, abortSignal }) {
       const lastUser = [...messages].reverse().find((m) => m.role === "user");
       const question = lastUser ? getMessageText(lastUser) : "";
 
       yield {
-        content: [{ type: "text", text: SEARCHING_STATUS }],
+        content: [{ type: "text", text: LOADING_STATUS }],
       };
 
-      if (!question) {
-        yield {
-          content: [
-            {
-              type: "text",
-              text: "I can only answer questions about this blog post, and I couldn't find that in it.",
-            },
-          ],
-        };
-        return;
-      }
-
       try {
-        const answer = await answerFromPost(question, excerpt);
-        yield {
-          content: [{ type: "text", text: answer }],
-        };
-      } catch {
+        let last = "";
+        for await (const chunk of streamAnswerFromPost(
+          question,
+          postContent,
+          abortSignal,
+        )) {
+          if (abortSignal?.aborted) return;
+          const text = chunk.trim();
+          if (!text || text === last) continue;
+          last = text;
+          yield {
+            content: [{ type: "text", text }],
+          };
+        }
+        if (!last) {
+          yield {
+            content: [
+              {
+                type: "text",
+                text: "Hi! Ask me anything about this post, or just say hello.",
+              },
+            ],
+          };
+        }
+      } catch (err) {
         yield {
           content: [
             {
               type: "text",
-              text: "Something went wrong while searching this post. Please try again.",
+              text: formatAssistantError(err),
             },
           ],
         };
@@ -64,8 +80,8 @@ function createAdapter(excerpt: string): ChatModelAdapter {
   };
 }
 
-const BlogAssistantRuntime: FC<{ excerpt: string }> = ({ excerpt }) => {
-  const adapter = useMemo(() => createAdapter(excerpt), [excerpt]);
+const BlogAssistantRuntime: FC<{ postContent: string }> = ({ postContent }) => {
+  const adapter = useMemo(() => createAdapter(postContent), [postContent]);
   const runtime = useLocalRuntime(adapter);
 
   return (
@@ -79,6 +95,7 @@ const BlogAssistantRuntime: FC<{ excerpt: string }> = ({ excerpt }) => {
 
 export const BlogAssistant: FC<BlogAssistantProps> = ({ post }) => {
   const [ready, setReady] = useState(false);
+  const postContent = useMemo(() => buildPostFallback(post), [post]);
 
   useEffect(() => {
     setReady(true);
@@ -86,5 +103,5 @@ export const BlogAssistant: FC<BlogAssistantProps> = ({ post }) => {
 
   if (!ready) return null;
 
-  return <BlogAssistantRuntime excerpt={post.excerpt} />;
+  return <BlogAssistantRuntime postContent={postContent} />;
 };

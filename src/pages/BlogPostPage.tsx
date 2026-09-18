@@ -191,6 +191,46 @@ function buildMdxComponents(): MDXComponents {
       </blockquote>
     ),
     hr: () => <hr className="border-theme my-10" />,
+    table: ({ children, ...props }) => (
+      <div className="my-8 overflow-x-auto rounded-xl border border-theme">
+        <table className="w-full border-collapse text-left" {...props}>
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children, ...props }) => (
+      <thead className="bg-card-theme" {...props}>
+        {children}
+      </thead>
+    ),
+    tbody: ({ children, ...props }) => (
+      <tbody className="[&>tr:last-child]:border-b-0" {...props}>
+        {children}
+      </tbody>
+    ),
+    tr: ({ children, ...props }) => (
+      <tr className="border-b border-theme" {...props}>
+        {children}
+      </tr>
+    ),
+    th: ({ children, ...props }) => (
+      <th
+        className="px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.08em] whitespace-nowrap"
+        style={{ color: 'var(--color-text)' }}
+        {...props}
+      >
+        {children}
+      </th>
+    ),
+    td: ({ children, ...props }) => (
+      <td
+        className="px-4 py-3 align-top leading-relaxed"
+        style={{ color: 'var(--color-text-secondary)', fontSize: '0.98rem' }}
+        {...props}
+      >
+        {children}
+      </td>
+    ),
     a: ({ children, href, ...props }) => (
       <a
         href={href}

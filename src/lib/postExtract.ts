@@ -3,12 +3,13 @@ export type PostSection = {
   text: string;
 };
 
-export type PostExtractResult = {
-  sections: PostSection[];
+export type PostOutline = {
+  text: string;
+  lead: string;
   headings: string[];
+  sections: PostSection[];
 };
 
-const MAX_CHUNK = 1200;
 const SKIP_TAGS = new Set([
   "PRE",
   "FIGURE",
@@ -21,6 +22,8 @@ const SKIP_TAGS = new Set([
   "CANVAS",
   "NOSCRIPT",
 ]);
+
+const MAX_SECTION = 900;
 
 function normalizeWhitespace(text: string): string {
   return text.replace(/\s+/g, " ").trim();
@@ -35,7 +38,9 @@ function collectText(el: Element): string {
 
   if (el.tagName === "LI") {
     const clone = el.cloneNode(true) as Element;
-    for (const decorative of clone.querySelectorAll(":scope > span.shrink-0, :scope > span.opacity-30")) {
+    for (const decorative of clone.querySelectorAll(
+      ":scope > span.shrink-0, :scope > span.opacity-30",
+    )) {
       decorative.remove();
     }
     return stripListPrefix(normalizeWhitespace(clone.textContent ?? ""));
@@ -60,42 +65,15 @@ function collectText(el: Element): string {
     return parts.join(" ");
   }
 
-  if (el.tagName === "P") {
-    return normalizeWhitespace(el.textContent ?? "");
-  }
-
   return normalizeWhitespace(el.textContent ?? "");
 }
 
-function splitLongSection(heading: string, text: string): PostSection[] {
-  if (text.length <= MAX_CHUNK) {
-    return text ? [{ heading, text }] : [];
-  }
-
-  const chunks: PostSection[] = [];
-  let remaining = text;
-
-  while (remaining.length > MAX_CHUNK) {
-    const window = remaining.slice(0, MAX_CHUNK);
-    const sentenceEnd = Math.max(
-      window.lastIndexOf(". "),
-      window.lastIndexOf("? "),
-      window.lastIndexOf("! "),
-      window.lastIndexOf("\n"),
-    );
-    const cut = sentenceEnd > MAX_CHUNK * 0.4 ? sentenceEnd + 1 : MAX_CHUNK;
-    const piece = remaining.slice(0, cut).trim();
-    if (piece) chunks.push({ heading, text: piece });
-    remaining = remaining.slice(cut).trim();
-  }
-
-  if (remaining) chunks.push({ heading, text: remaining });
-  return chunks;
-}
-
-function walkNodes(root: Element): { sections: PostSection[]; headings: string[] } {
+function walkNodes(root: Element): {
+  sections: PostSection[];
+  headings: string[];
+} {
   const headings: string[] = [];
-  const raw: PostSection[] = [];
+  const sections: PostSection[] = [];
   let currentHeading = "";
   let buffer: string[] = [];
 
@@ -103,9 +81,9 @@ function walkNodes(root: Element): { sections: PostSection[]; headings: string[]
     const text = buffer.join(" ").trim();
     buffer = [];
     if (!text && !currentHeading) return;
-    for (const chunk of splitLongSection(currentHeading, text)) {
-      raw.push(chunk);
-    }
+    const clipped =
+      text.length > MAX_SECTION ? `${text.slice(0, MAX_SECTION).trim()}…` : text;
+    sections.push({ heading: currentHeading, text: clipped });
   };
 
   const visit = (node: Element) => {
@@ -141,7 +119,6 @@ function walkNodes(root: Element): { sections: PostSection[]; headings: string[]
       for (const child of Array.from(node.children)) {
         visit(child);
       }
-      return;
     }
   };
 
@@ -150,16 +127,32 @@ function walkNodes(root: Element): { sections: PostSection[]; headings: string[]
   }
   flush();
 
-  return { sections: raw, headings };
+  return { sections, headings };
 }
 
-export function extractPostSections(
+export function extractPostOutline(
   root: Element | null = typeof document !== "undefined"
     ? document.querySelector("[data-post-body]")
     : null,
-): PostExtractResult {
+): PostOutline {
   if (!root) {
-    return { sections: [], headings: [] };
+    return { text: "", lead: "", headings: [], sections: [] };
   }
-  return walkNodes(root);
+
+  const { sections, headings } = walkNodes(root);
+  const text = sections
+    .map((s) => (s.heading ? `${s.heading}\n${s.text}` : s.text))
+    .filter(Boolean)
+    .join("\n\n");
+  const lead = (sections.find((s) => s.text)?.text ?? "").slice(0, 420).trim();
+
+  return { text, lead, headings, sections };
+}
+
+export function extractPostText(
+  root: Element | null = typeof document !== "undefined"
+    ? document.querySelector("[data-post-body]")
+    : null,
+): string {
+  return extractPostOutline(root).text;
 }

@@ -210,7 +210,7 @@ export const AssistantModal: FC = () => {
         if (open) setView("thread");
       }}
     >
-      <AssistantModalPrimitive.Anchor className="aui-root aui-modal-anchor fixed end-4 bottom-4 size-11">
+      <AssistantModalPrimitive.Anchor className="aui-root aui-modal-anchor fixed z-[55] end-6 bottom-[4.75rem] size-11 md:end-8 md:bottom-8">
         <AssistantModalPrimitive.Trigger asChild>
           <AssistantModalButton />
         </AssistantModalPrimitive.Trigger>
