@@ -143,6 +143,66 @@ function applySeoToHtml(html: string, seo: SeoConfig): string {
   return replaceJsonLd(next, seo.jsonLd);
 }
 
+
+function homepageSeo(siteUrl: string): SeoConfig {
+  const title = `${PERSON_NAME} | Solution Architect`;
+  const description =
+    'Solution Architect specializing in scalable backend systems and high-performance web apps with React, Node.js, NestJS, and Python. Explore portfolio and blog.';
+  const ogImage = `${siteUrl}/meta_image.png`;
+  return {
+    title,
+    description,
+    keywords:
+      'Prathamesh Belvalkar, solution architect, backend engineer, React, Node.js, NestJS, Python, FastAPI, portfolio',
+    canonical: `${siteUrl}/`,
+    ogType: 'website',
+    ogImage,
+    siteName: PERSON_NAME,
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': `${siteUrl}/#website`,
+          url: `${siteUrl}/`,
+          name: PERSON_NAME,
+          description,
+          publisher: { '@id': `${siteUrl}/#person` },
+          inLanguage: 'en',
+        },
+        {
+          '@type': 'ProfilePage',
+          '@id': `${siteUrl}/#profilepage`,
+          url: `${siteUrl}/`,
+          name: title,
+          isPartOf: { '@id': `${siteUrl}/#website` },
+          mainEntity: { '@id': `${siteUrl}/#person` },
+        },
+        {
+          '@type': 'Person',
+          '@id': `${siteUrl}/#person`,
+          name: PERSON_NAME,
+          url: `${siteUrl}/`,
+          image: ogImage,
+          jobTitle: 'Solution Architect',
+          description,
+          email: 'mailto:prathameshbelvalkars@gmail.com',
+          worksFor: { '@type': 'Organization', name: 'Airrived AI' },
+          alumniOf: [
+            { '@type': 'CollegeOrUniversity', name: "KIT's IMER, Kolhapur" },
+            { '@type': 'CollegeOrUniversity', name: 'The New College, Kolhapur' },
+          ],
+          knowsLanguage: ['en', 'hi', 'mr', 'ja'],
+          sameAs: [
+            'https://www.linkedin.com/in/prathamesh-belvalkar-83b72a267/',
+            'https://github.com/prathameshbelvalkar',
+          ],
+        },
+      ],
+    },
+  };
+}
+
 function blogListingSeo(siteUrl: string): SeoConfig {
   const pageUrl = `${siteUrl}/blog`;
   const title = `Blog | ${PERSON_NAME}`;
@@ -158,15 +218,36 @@ function blogListingSeo(siteUrl: string): SeoConfig {
     siteName: PERSON_NAME,
     jsonLd: {
       '@context': 'https://schema.org',
-      '@type': 'Blog',
-      name: title,
-      description: BLOG_LISTING_DESCRIPTION,
-      url: pageUrl,
-      author: {
-        '@type': 'Person',
-        name: PERSON_NAME,
-        url: `${siteUrl}/`,
-      },
+      '@graph': [
+        {
+          '@type': 'Blog',
+          name: title,
+          description: BLOG_LISTING_DESCRIPTION,
+          url: pageUrl,
+          author: {
+            '@type': 'Person',
+            name: PERSON_NAME,
+            url: `${siteUrl}/`,
+          },
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Home',
+              item: `${siteUrl}/`,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Blog',
+              item: pageUrl,
+            },
+          ],
+        },
+      ],
     },
   };
 }
@@ -189,21 +270,48 @@ function blogPostSeo(siteUrl: string, post: BlogPostFrontmatter): SeoConfig {
     articleTags: post.tags,
     jsonLd: {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: post.title,
-      description: post.excerpt,
-      datePublished: published,
-      author: {
-        '@type': 'Person',
-        name: PERSON_NAME,
-        url: `${siteUrl}/`,
-      },
-      mainEntityOfPage: {
-        '@type': 'WebPage',
-        '@id': pageUrl,
-      },
-      keywords: post.tags.join(', '),
-      articleSection: post.category,
+      '@graph': [
+        {
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.excerpt,
+          datePublished: published,
+          author: {
+            '@type': 'Person',
+            name: PERSON_NAME,
+            url: `${siteUrl}/`,
+          },
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': pageUrl,
+          },
+          keywords: post.tags.join(', '),
+          articleSection: post.category,
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Home',
+              item: `${siteUrl}/`,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Blog',
+              item: `${siteUrl}/blog`,
+            },
+            {
+              '@type': 'ListItem',
+              position: 3,
+              name: post.title,
+              item: pageUrl,
+            },
+          ],
+        },
+      ],
     },
   };
 }
@@ -218,14 +326,16 @@ export function generateSeoHtml(distDir: string, siteUrl: string, postsDir: stri
   if (!fs.existsSync(indexPath)) return;
 
   const baseHtml = fs.readFileSync(indexPath, 'utf8');
-  const listingHtml = applySeoToHtml(baseHtml, blogListingSeo(siteUrl));
+  const homeHtml = applySeoToHtml(baseHtml, homepageSeo(siteUrl));
+  fs.writeFileSync(indexPath, homeHtml);
+  const listingHtml = applySeoToHtml(homeHtml, blogListingSeo(siteUrl));
   writeSeoHtml(path.join(distDir, 'blog', 'index.html'), listingHtml);
 
   const files = fs.readdirSync(postsDir).filter((f) => f.endsWith('.mdx'));
   for (const file of files) {
     const post = parseMdxPost(path.join(postsDir, file));
     if (!post) continue;
-    const postHtml = applySeoToHtml(baseHtml, blogPostSeo(siteUrl, post));
+    const postHtml = applySeoToHtml(homeHtml, blogPostSeo(siteUrl, post));
     writeSeoHtml(path.join(distDir, 'blog', post.slug, 'index.html'), postHtml);
   }
 }

@@ -23,6 +23,8 @@ export const portfolioData = {
   person: {
     name: 'Prathamesh Belvalkar',
   },
+  siteDescription:
+    'Solution Architect specializing in scalable backend systems and high-performance web apps with React, Node.js, NestJS, and Python. Explore portfolio and blog.',
   hero: {
     titleLines: ['PRATHAMESH', 'BELVALKAR'],
     whoAmILabel: 'Who am I',

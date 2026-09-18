@@ -20,8 +20,12 @@ export function Layout({ children }: Props) {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState(() => {
-    const stored = localStorage.getItem('lang');
-    if (stored && uiLangToI18nLang[stored]) return stored;
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('lang');
+        if (stored && uiLangToI18nLang[stored]) return stored;
+      } catch {}
+    }
     return portfolioData.languages[0]?.code ?? 'EN';
   });
   const [isLangOpen, setIsLangOpen] = useState(false);

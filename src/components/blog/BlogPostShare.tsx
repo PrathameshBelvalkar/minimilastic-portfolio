@@ -21,7 +21,11 @@ export function BlogPostShare({ title, slug }: Props) {
   const [copied, setCopied] = useState(false);
 
   const shareUrl = useMemo(() => {
-    const origin = window.location.origin.replace(/\/+$/, '');
+    const configured = (import.meta.env.VITE_SITE_URL as string | undefined)?.trim();
+    const origin = (
+      configured ||
+      (typeof window !== 'undefined' ? window.location.origin : 'https://prathameshbelvalkar.in')
+    ).replace(/\/+$/, '');
     return `${origin}/blog/${slug}`;
   }, [slug]);
 

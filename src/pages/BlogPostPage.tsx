@@ -242,14 +242,16 @@ function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: stri
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [PostContent, setPostContent] = useState<MDXContentComponent | null>(null);
-  const [loading, setLoading] = useState(true);
+  const post = blogPosts.find((p) => p.slug === slug);
+  const relatedPosts = useMemo(() => (slug ? getRelatedPosts(slug, 3) : []), [slug]);
+  const PostContent = useMemo(() => {
+    if (!slug) return null;
+    return getBlogPostComponent(slug) as MDXContentComponent | null;
+  }, [slug]);
+  const loading = !PostContent;
   const [toc, setToc] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState('');
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const post = blogPosts.find((p) => p.slug === slug);
-  const relatedPosts = useMemo(() => (slug ? getRelatedPosts(slug, 3) : []), [slug]);
 
   useEffect(() => {
     if (post) applyBlogPostSeo(post);
@@ -257,14 +259,8 @@ export default function BlogPostPage() {
   }, [post]);
 
   useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
     setToc([]);
     setActiveId('');
-    getBlogPostComponent(slug).then((component) => {
-      setPostContent(() => component as MDXContentComponent);
-      setLoading(false);
-    });
   }, [slug]);
 
   useEffect(() => {

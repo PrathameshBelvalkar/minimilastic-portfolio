@@ -11,8 +11,16 @@ export const uiLangToI18nLang: Record<string, string> = {
   MR: 'mr',
 };
 
-const storedUiLang = localStorage.getItem('lang');
-const initialUiLang = storedUiLang && uiLangToI18nLang[storedUiLang] ? storedUiLang : 'EN';
+function readStoredUiLang(): string {
+  if (typeof window === 'undefined') return 'EN';
+  try {
+    const storedUiLang = localStorage.getItem('lang');
+    if (storedUiLang && uiLangToI18nLang[storedUiLang]) return storedUiLang;
+  } catch {}
+  return 'EN';
+}
+
+const initialUiLang = readStoredUiLang();
 
 i18n.use(initReactI18next).init({
   resources: {
