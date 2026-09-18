@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent, getRelatedPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
 import { BlogPostShare } from '../components/blog/BlogPostShare';
-import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
+// import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 import NotFoundPage from './NotFoundPage';
@@ -396,7 +396,7 @@ export default function BlogPostPage() {
               )}
             </div>
 
-            {!loading && post && <BlogCommentsSection postSlug={post.slug} />}
+            {/* {!loading && post && <BlogCommentsSection postSlug={post.slug} />} */}
           </div>
 
           <aside className="hidden lg:block">

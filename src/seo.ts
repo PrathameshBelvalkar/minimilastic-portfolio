@@ -66,13 +66,13 @@ export function applyDefaultSeo() {
   removeArticleMeta();
   removeDynamicJsonLd();
   const siteUrl = getSiteUrl();
-  const title = `${portfolioData.person.name} | Full Stack Developer`;
+  const title = `${portfolioData.person.name} | Solution Architect`;
   const description = portfolioData.hero.intro;
   const ogImage = `${siteUrl}/meta_image.png`;
 
   document.title = title;
   upsertMeta('name', 'description', description);
-  upsertMeta('name', 'keywords', 'full stack developer, backend engineer, React, Node.js, NestJS, Python, FastAPI, portfolio');
+  upsertMeta('name', 'keywords', 'solution architect, backend engineer, React, Node.js, NestJS, Python, FastAPI, portfolio');
 
   upsertLink('canonical', `${siteUrl}/`);
 

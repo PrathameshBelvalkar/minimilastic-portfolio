@@ -27,8 +27,8 @@ export const portfolioData = {
     titleLines: ['PRATHAMESH', 'BELVALKAR'],
     whoAmILabel: 'Who am I',
     intro:
-      'Full Stack Developer specializing in building scalable backend systems and high-performance web applications that align with business goals and deliver excellent user experiences.',
-    subIntro: 'Currently exploring the intersection of AI and Software Development at Airrived.',
+      'Solution Architect specializing in building scalable backend systems and high-performance web applications that align with business goals and deliver excellent user experiences.',
+    subIntro: 'Currently working as Assistant Solution Architect at Airrived AI.',
     scrollCtaLabel: 'Scroll',
     scrollCtaHref: '#experience',
   },
@@ -141,14 +141,15 @@ export const portfolioData = {
   experience: [
     {
       company: 'Airrived AI',
-      tagline: 'Software and AI development',
+      tagline: 'Solution architecture and AI systems',
       period: 'Mar 2026 — Present',
-      position: 'Software and AI Python Developer',
+      position: 'Assistant Solution Architect',
       location: 'India',
       industry: 'Technology / AI',
       website: 'airrived.ai',
       description: [
-        'Working as a Software and AI Python Developer, contributing to intelligent software solutions leveraging modern AI and Python-based technologies.',
+        'Produce architecture and data-flow diagrams, technical documentation, and architecture decisions; review designs and implementations; guide developers; partner with DevOps, product, and business teams.',
+        'Troubleshoot complex system-level problems; evaluate new technologies; estimate technical effort, infrastructure, and costs; assist the Solution Architect on larger decisions and ensure solutions meet business and technical requirements.',
       ],
     },
     {

@@ -10,8 +10,8 @@
   },
   "hero": {
     "whoAmILabel": "Who am I",
-    "intro": "Full Stack Developer specializing in building scalable backend systems and high-performance web applications that align with business goals and deliver excellent user experiences.",
-    "subIntro": "Currently exploring the intersection of AI and Software Development at Airrived.",
+    "intro": "Solution Architect specializing in building scalable backend systems and high-performance web applications that align with business goals and deliver excellent user experiences.",
+    "subIntro": "Currently working as Assistant Solution Architect at Airrived AI.",
     "scrollCtaLabel": "Scroll",
     "trendingLabel": "Trending",
     "trendingAllCta": "All posts"
@@ -38,9 +38,10 @@
     "websiteLabel": "Website",
     "jobs": {
       "airrived": {
-        "tagline": "Software and AI development",
+        "tagline": "Solution architecture and AI systems",
         "description": [
-          "Working as a Software and AI Python Developer, contributing to intelligent software solutions leveraging modern AI and Python-based technologies."
+          "Produce architecture and data-flow diagrams, technical documentation, and architecture decisions; review designs and implementations; guide developers; partner with DevOps, product, and business teams.",
+          "Troubleshoot complex system-level problems; evaluate new technologies; estimate technical effort, infrastructure, and costs; assist the Solution Architect on larger decisions and ensure solutions meet business and technical requirements."
         ]
       },
       "ramee": {
