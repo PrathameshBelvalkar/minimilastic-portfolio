@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent, getRelatedPosts } from '../blog';
+import { BlogAssistant } from '../components/blog/BlogAssistant';
 import { BlogCard } from '../components/blog/BlogCard';
 import { BlogPostShare } from '../components/blog/BlogPostShare';
 // import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
@@ -378,7 +379,7 @@ export default function BlogPostPage() {
               <BlogPostShare title={post.title} slug={post.slug} />
             </div>
 
-            <div ref={contentRef}>
+            <div ref={contentRef} data-post-body>
               {loading ? (
                 <div className="flex flex-col gap-4 animate-pulse mt-4">
                   {[...Array(7)].map((_, i) => (
@@ -420,6 +421,7 @@ export default function BlogPostPage() {
         </motion.section>
       )}
     </main>
+    {!loading && post && <BlogAssistant key={post.slug} post={post} />}
     </>
   );
 }

@@ -1,11 +1,13 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "tw-shimmer";
 
 @theme {
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  
+
   --text-label: 11px;
   --tracking-label: 0.15em;
-  
+
   /* Theme Variables */
   --color-bg: #ffffff;
   --color-text: #111111;
@@ -46,6 +48,91 @@
   --color-selection-bg: #ff8c42;
   --color-selection-text: #1a1412;
   --color-accent: #ff8c42;
+}
+
+:root,
+.dark,
+.evening {
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --muted: var(--color-card-bg);
+  --muted-foreground: var(--color-text-muted);
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-accent);
+  --primary: var(--color-accent);
+  --primary-foreground: var(--color-bg);
+  --card: var(--color-card-bg);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-bg);
+  --popover-foreground: var(--color-text);
+  --secondary: var(--color-card-bg);
+  --secondary-foreground: var(--color-text-secondary);
+  --accent: var(--color-card-bg);
+  --accent-foreground: var(--color-text);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+.aui-modal-anchor {
+  z-index: 40;
+}
+
+.aui-modal-content {
+  border: 1px solid var(--color-border) !important;
+  background: var(--color-bg) !important;
+  box-shadow: none !important;
+  border-radius: 0.75rem !important;
+}
+
+.aui-modal-content .aui-thread-viewport-footer {
+  background: var(--color-bg) !important;
+}
+
+.aui-modal-content [data-slot="aui_composer-shell"] {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.aui-modal-button {
+  border: 1px solid var(--color-border) !important;
+  background: var(--color-bg) !important;
+  color: var(--color-accent) !important;
+  box-shadow: none !important;
+}
+
+.aui-modal-button:hover {
+  background: var(--color-card-bg) !important;
+}
+
+.aui-composer-add-attachment {
+  display: none !important;
 }
 
 html {
@@ -185,18 +272,18 @@ body {
     @apply text-[11px] font-bold uppercase tracking-[0.15em];
     color: var(--color-text-secondary);
   }
-  
+
   .display-title {
     @apply font-extrabold leading-[0.95] tracking-[-0.04em] uppercase;
     font-size: clamp(44px, 10vw, 90px);
     overflow-wrap: anywhere;
     word-break: break-word;
   }
-  
+
   .border-theme {
     border-color: var(--color-border);
   }
-  
+
   .bg-card-theme {
     background-color: var(--color-card-bg);
   }
@@ -232,4 +319,27 @@ body {
     background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'100'%20height%3D'100'%20viewBox%3D'0%200%20100%20100'%3E%3Cg%20fill-rule%3D'evenodd'%3E%3Cg%20fill%3D'%238b7367'%20fill-opacity%3D'0.22'%3E%3Cpath%20opacity%3D'.5'%20d%3D'M96%2095h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-9-10h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm9-10v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-9-10h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm9-10v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-9-10h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm9-10v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-10%200v-9h-9v9h9zm-9-10h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9zm10%200h9v-9h-9v9z'%2F%3E%3Cpath%20d%3D'M6%205V0H5v5H0v1h5v94h1V6h94V5H6z'%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   }
 
+}
+
+@custom-variant data-open (&:where([data-state="open"], [data-open]:not([data-open="false"])));
+
+@custom-variant data-closed (&:where([data-state="closed"], [data-closed]:not([data-closed="false"])));
+
+@theme inline {
+  @keyframes collapsible-down {
+  from {
+    height: 0;
+    }
+  to {
+    height: var(--radix-collapsible-content-height, var(--collapsible-panel-height, auto));
+    }
+  }
+  @keyframes collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height, var(--collapsible-panel-height, auto));
+    }
+  to {
+    height: 0;
+    }
+  }
 }
