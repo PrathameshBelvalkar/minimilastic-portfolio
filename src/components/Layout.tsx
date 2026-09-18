@@ -96,6 +96,7 @@ export function Layout({ children }: Props) {
       <BackToTopButton
         show={showBackToTop}
         disabled={isMenuOpen}
+        stacked={/^\/blog\/.+/.test(pathname)}
         onClick={scrollToTop}
       />
     </div>

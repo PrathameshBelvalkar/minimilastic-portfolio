@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'path';
 import rehypeHighlight from 'rehype-highlight';
 import remarkFrontmatter from 'remark-frontmatter';
+import remarkGfm from 'remark-gfm';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import {defineConfig, loadEnv} from 'vite';
 import {seoHtmlPlugin} from './vite-plugins/generate-seo-html';
@@ -35,7 +36,7 @@ export default defineConfig(({mode}) => {
         },
       },
       mdx({
-        remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+        remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, remarkGfm],
         rehypePlugins: [rehypeHighlight],
       }),
       react(),

@@ -84,11 +84,11 @@
     "sectionSubheading": "Specialized in the intersection of design precision and engineering excellence.",
     "ai": {
       "category": "AI & Python Development",
-      "desc": "Building intelligent software solutions and AI-powered applications with Python."
+      "desc": "Building intelligent software solutions and AI-powered applications with Python, including solution architecture, C4 and data-flow diagrams, and architecture decisions."
     },
     "backend": {
       "category": "Backend Engineering",
-      "desc": "Building performant, scalable backend systems and secure RESTful APIs with 2.5+ years of experience."
+      "desc": "Building performant, scalable backend systems and secure RESTful APIs, with design reviews, technical documentation, and effort estimation."
     },
     "frontendDb": {
       "category": "Frontend & Database",

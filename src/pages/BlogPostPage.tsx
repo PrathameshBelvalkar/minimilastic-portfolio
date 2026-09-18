@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent, getRelatedPosts } from '../blog';
+import { BlogAssistant } from '../components/blog/BlogAssistant';
 import { BlogCard } from '../components/blog/BlogCard';
 import { BlogPostShare } from '../components/blog/BlogPostShare';
 // import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
@@ -190,6 +191,46 @@ function buildMdxComponents(): MDXComponents {
       </blockquote>
     ),
     hr: () => <hr className="border-theme my-10" />,
+    table: ({ children, ...props }) => (
+      <div className="my-8 overflow-x-auto rounded-xl border border-theme">
+        <table className="w-full border-collapse text-left" {...props}>
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children, ...props }) => (
+      <thead className="bg-card-theme" {...props}>
+        {children}
+      </thead>
+    ),
+    tbody: ({ children, ...props }) => (
+      <tbody className="[&>tr:last-child]:border-b-0" {...props}>
+        {children}
+      </tbody>
+    ),
+    tr: ({ children, ...props }) => (
+      <tr className="border-b border-theme" {...props}>
+        {children}
+      </tr>
+    ),
+    th: ({ children, ...props }) => (
+      <th
+        className="px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.08em] whitespace-nowrap"
+        style={{ color: 'var(--color-text)' }}
+        {...props}
+      >
+        {children}
+      </th>
+    ),
+    td: ({ children, ...props }) => (
+      <td
+        className="px-4 py-3 align-top leading-relaxed"
+        style={{ color: 'var(--color-text-secondary)', fontSize: '0.98rem' }}
+        {...props}
+      >
+        {children}
+      </td>
+    ),
     a: ({ children, href, ...props }) => (
       <a
         href={href}
@@ -378,7 +419,7 @@ export default function BlogPostPage() {
               <BlogPostShare title={post.title} slug={post.slug} />
             </div>
 
-            <div ref={contentRef}>
+            <div ref={contentRef} data-post-body>
               {loading ? (
                 <div className="flex flex-col gap-4 animate-pulse mt-4">
                   {[...Array(7)].map((_, i) => (
@@ -420,6 +461,7 @@ export default function BlogPostPage() {
         </motion.section>
       )}
     </main>
+    {!loading && post && <BlogAssistant key={post.slug} post={post} />}
     </>
   );
 }

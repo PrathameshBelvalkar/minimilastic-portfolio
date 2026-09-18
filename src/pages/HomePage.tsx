@@ -7,7 +7,7 @@ import { CapabilitiesSection } from '../components/sections/CapabilitiesSection'
 import { ContactSection } from '../components/sections/ContactSection';
 import { ExperienceSection } from '../components/sections/ExperienceSection';
 import { HeroSection } from '../components/sections/HeroSection';
-import { ProjectsSection } from '../components/sections/ProjectsSection';
+// import { ProjectsSection } from '../components/sections/ProjectsSection';
 import { blogPosts } from '../blog';
 import { portfolioData } from '../data';
 import { applyProjectSeo } from '../seo';
@@ -67,10 +67,10 @@ export default function HomePage() {
           />
         </motion.div>
         <ExperienceSection experience={portfolioData.experience} />
-        <ProjectsSection
+        {/* <ProjectsSection
           projects={portfolioData.projects}
           onSelectProject={(p) => setSelectedProject(p)}
-        />
+        /> */}
         <CapabilitiesSection capabilities={portfolioData.capabilities} />
         <ContactSection email={portfolioData.contact.email} links={portfolioData.contact.links} />
       </main>
