@@ -3,48 +3,107 @@
 > Solution Architect specializing in scalable backend systems and high-performance web apps with React, Node.js, NestJS, and Python. Explore portfolio and blog.
 
 ## About
-Prathamesh Belvalkar is a Solution Architect and AI/Python developer focused on scalable backends, secure APIs, and high-performance web applications.
+Prathamesh Belvalkar is a Solution Architect and AI/Python developer focused on scalable backends, secure APIs, and high-performance web applications. Currently Assistant Solution Architect at Airrived AI, writing about architecture decisions, design reviews, ADRs, C4 diagrams, and AI backend data flows.
 
 ## Pages
 - [Home](https://prathameshbelvalkar.in/): Portfolio homepage with about, capabilities, experience, projects, and contact
-- [Blog](https://prathameshbelvalkar.in/blog): Index of engineering articles
+- [Blog](https://prathameshbelvalkar.in/blog): Index of engineering and architecture articles
 
 ## Blog posts
 ### [AI Automation Workflows with Python](https://prathameshbelvalkar.in/blog/ai-python-automation-workflows)
 - Date: 2026-03-22
+- Category: AI & Python
 - Summary: Lessons from building production AI pipelines — from prompt engineering to async task queues and observability that actually works.
+
+### [Architecture Decision Records in Git: Stop Losing the Why](https://prathameshbelvalkar.in/blog/architecture-decision-records-in-git)
+- Date: 2026-04-18
+- Category: Architecture
+- Summary: Slack threads die. Confluence pages rot. Here is how I keep Architecture Decision Records in git with a lightweight MADR-style template, PR review, and code that points back to the decision.
 
 ### [Building Scalable APIs with NestJS](https://prathameshbelvalkar.in/blog/building-scalable-apis-nestjs)
 - Date: 2026-04-10
+- Category: Backend
 - Summary: How I structure production-grade APIs with authentication, RBAC, validation, and clean module boundaries baked in from day one.
+
+### [C4 Diagrams for the Right Audience](https://prathameshbelvalkar.in/blog/c4-diagrams-for-the-right-audience)
+- Date: 2026-05-05
+- Category: Architecture
+- Summary: Context for product, containers for DevOps, components for developers — how I use C4 zoom levels so architecture diagrams stop confusing the people who need them most.
 
 ### [Modern CSS Layout Techniques Worth Knowing](https://prathameshbelvalkar.in/blog/css-modern-layouts)
 - Date: 2026-02-28
+- Category: Frontend
 - Summary: Container queries, CSS Grid subgrid, logical properties, and the modern CSS features that make responsive layout genuinely enjoyable to write.
+
+### [Data Flow Diagrams for AI Backends](https://prathameshbelvalkar.in/blog/data-flow-diagrams-for-ai-backends)
+- Date: 2026-06-08
+- Category: Architecture
+- Summary: How I draw request → retrieval → model → guardrails → persist flows for AI backends, with Mermaid sequences, PII-aware logging notes, and a FastAPI-shaped sketch of a generic RAG path.
 
 ### [Docker in Production: Beyond the Basics](https://prathameshbelvalkar.in/blog/docker-production-deployment)
 - Date: 2026-04-18
+- Category: DevOps
 - Summary: Multi-stage builds, minimal images, health checks, and secrets management — the Docker patterns that separate dev containers from production-grade deployments.
+
+### [Evaluating Tech and Assisting the Solution Architect](https://prathameshbelvalkar.in/blog/evaluating-tech-and-assisting-the-solution-architect)
+- Date: 2026-09-15
+- Category: Architecture
+- Summary: Spikes, bake-offs, and risk registers — how I evaluate technologies as an Assistant Solution Architect and what I bring to the Solution Architect versus what I decide myself.
+
+### [From Engineer to Assistant Solution Architect: What Actually Changes](https://prathameshbelvalkar.in/blog/from-engineer-to-assistant-solution-architect)
+- Date: 2026-04-01
+- Category: Architecture
+- Summary: Moving from shipping features to shaping systems: diagrams, design reviews, estimates, and guiding teams without becoming a bottleneck — a first-person look at the Assistant Solution Architect role.
+
+### [Guiding Developers Without Being a Bottleneck](https://prathameshbelvalkar.in/blog/guiding-developers-without-being-a-bottleneck)
+- Date: 2026-07-12
+- Category: Architecture
+- Summary: Office hours, ADRs, and RFCs — how I guide developers as an Assistant Solution Architect without becoming the human approval gate for every pull request.
+
+### [How I Run Architecture Design Reviews](https://prathameshbelvalkar.in/blog/how-i-run-architecture-design-reviews)
+- Date: 2026-05-22
+- Category: Architecture
+- Summary: A practical playbook for architecture design reviews: pre-reads, decision vs parking lot, questions that expose risk, and how to review the design without attacking the author.
 
 ### [Microservices Communication: Sync vs Async](https://prathameshbelvalkar.in/blog/microservices-communication-patterns)
 - Date: 2026-01-20
+- Category: Backend
 - Summary: When to use synchronous HTTP between services and when to reach for a message queue — the decision framework that prevents distributed monolith antipatterns.
+
+### [NFRs, Effort, and Infrastructure Cost](https://prathameshbelvalkar.in/blog/nfrs-effort-and-infrastructure-cost)
+- Date: 2026-06-25
+- Category: Architecture
+- Summary: How I turn latency, availability, and token spend into estimates leadership can use — with cost-driver diagrams and a small TypeScript model for AI backend planning.
 
 ### [The Node.js Event Loop: What You Actually Need to Know](https://prathameshbelvalkar.in/blog/nodejs-event-loop-deep-dive)
 - Date: 2026-03-10
+- Category: Backend
 - Summary: A practical, no-nonsense breakdown of the event loop, the phases that matter for backend developers, and how blocking it destroys your API's throughput.
 
 ### [PostgreSQL Query Optimization in Practice](https://prathameshbelvalkar.in/blog/postgresql-query-optimization)
 - Date: 2026-04-05
+- Category: Backend
 - Summary: EXPLAIN ANALYZE, index strategies, and the query patterns that actually kill database performance — lessons from profiling real production systems.
 
 ### [React Performance Patterns That Actually Matter](https://prathameshbelvalkar.in/blog/react-performance-patterns)
 - Date: 2026-02-14
+- Category: Frontend
 - Summary: Cutting through the noise — the React performance techniques that move the needle in real apps, and the ones that are mostly cargo cult.
+
+### [System-Level Troubleshooting as an Architect](https://prathameshbelvalkar.in/blog/system-level-troubleshooting-as-an-architect)
+- Date: 2026-08-15
+- Category: Architecture
+- Summary: When production hurts across services, I ask whether it is the model, the queue, or the database — correlation IDs, incident sequences, and NestJS logging patterns that make system-level debugging tractable.
 
 ### [TypeScript Patterns That Eliminate Runtime Bugs](https://prathameshbelvalkar.in/blog/typescript-advanced-patterns)
 - Date: 2026-04-28
+- Category: Frontend
 - Summary: Advanced TypeScript techniques I use daily — discriminated unions, branded types, and template literals — that catch entire classes of bugs at compile time.
+
+### [Working With Product, DevOps, and Business](https://prathameshbelvalkar.in/blog/working-with-product-devops-and-business)
+- Date: 2026-07-29
+- Category: Architecture
+- Summary: Same architecture decision, three languages — how I translate NFRs and trade-offs for product, DevOps, and business partners without losing technical honesty.
 
 ## Contact
 - Email: prathameshbelvalkars@gmail.com
