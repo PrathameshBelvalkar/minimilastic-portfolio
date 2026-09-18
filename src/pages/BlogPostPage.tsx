@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router';
 import { blogPosts, getBlogPostComponent, getRelatedPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
 import { BlogPostShare } from '../components/blog/BlogPostShare';
-import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
+// import { BlogCommentsSection } from '../components/blog/comments/BlogCommentsSection';
 import { MermaidDiagram } from '../components/blog/MermaidDiagram';
 import { applyBlogPostSeo, applyDefaultSeo } from '../seo';
 import NotFoundPage from './NotFoundPage';
@@ -242,14 +242,16 @@ function TableOfContents({ items, activeId }: { items: TocItem[]; activeId: stri
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [PostContent, setPostContent] = useState<MDXContentComponent | null>(null);
-  const [loading, setLoading] = useState(true);
+  const post = blogPosts.find((p) => p.slug === slug);
+  const relatedPosts = useMemo(() => (slug ? getRelatedPosts(slug, 3) : []), [slug]);
+  const PostContent = useMemo(() => {
+    if (!slug) return null;
+    return getBlogPostComponent(slug) as MDXContentComponent | null;
+  }, [slug]);
+  const loading = !PostContent;
   const [toc, setToc] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState('');
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const post = blogPosts.find((p) => p.slug === slug);
-  const relatedPosts = useMemo(() => (slug ? getRelatedPosts(slug, 3) : []), [slug]);
 
   useEffect(() => {
     if (post) applyBlogPostSeo(post);
@@ -257,14 +259,8 @@ export default function BlogPostPage() {
   }, [post]);
 
   useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
     setToc([]);
     setActiveId('');
-    getBlogPostComponent(slug).then((component) => {
-      setPostContent(() => component as MDXContentComponent);
-      setLoading(false);
-    });
   }, [slug]);
 
   useEffect(() => {
@@ -396,7 +392,7 @@ export default function BlogPostPage() {
               )}
             </div>
 
-            {!loading && post && <BlogCommentsSection postSlug={post.slug} />}
+            {/* {!loading && post && <BlogCommentsSection postSlug={post.slug} />} */}
           </div>
 
           <aside className="hidden lg:block">

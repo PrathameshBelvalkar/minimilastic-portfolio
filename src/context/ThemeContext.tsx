@@ -5,6 +5,7 @@ type Theme = 'light' | 'evening' | 'dark';
 const THEME_STORAGE_KEY = 'portfolio-theme';
 
 function readStoredTheme(): Theme {
+  if (typeof window === 'undefined') return 'light';
   try {
     const raw = localStorage.getItem(THEME_STORAGE_KEY);
     if (raw === 'light' || raw === 'evening' || raw === 'dark') return raw;

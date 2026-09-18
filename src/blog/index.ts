@@ -49,7 +49,7 @@ export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
     .slice(0, limit);
 }
 
-export async function getBlogPostComponent(slug: string): Promise<ComponentType | null> {
+export function getBlogPostComponent(slug: string): ComponentType | null {
   const key = `./posts/${slug}.mdx`;
   const mod = modules[key];
   return mod ? mod.default : null;

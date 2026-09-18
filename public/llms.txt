@@ -1,0 +1,18 @@
+# Prathamesh Belvalkar
+
+> Solution Architect specializing in scalable backend systems and high-performance web apps with React, Node.js, NestJS, and Python. Explore portfolio and blog.
+
+## Pages
+- [Home](https://prathameshbelvalkar.in/): Profile, experience, projects, and contact
+- [Blog](https://prathameshbelvalkar.in/blog): Technical articles on backend, frontend, and DevOps
+
+## Blog posts
+- [AI Automation Workflows with Python](https://prathameshbelvalkar.in/blog/ai-python-automation-workflows): Lessons from building production AI pipelines — from prompt engineering to async task queues and observability that actually works.
+- [Building Scalable APIs with NestJS](https://prathameshbelvalkar.in/blog/building-scalable-apis-nestjs): How I structure production-grade APIs with authentication, RBAC, validation, and clean module boundaries baked in from day one.
+- [Modern CSS Layout Techniques Worth Knowing](https://prathameshbelvalkar.in/blog/css-modern-layouts): Container queries, CSS Grid subgrid, logical properties, and the modern CSS features that make responsive layout genuinely enjoyable to write.
+- [Docker in Production: Beyond the Basics](https://prathameshbelvalkar.in/blog/docker-production-deployment): Multi-stage builds, minimal images, health checks, and secrets management — the Docker patterns that separate dev containers from production-grade deployments.
+- [Microservices Communication: Sync vs Async](https://prathameshbelvalkar.in/blog/microservices-communication-patterns): When to use synchronous HTTP between services and when to reach for a message queue — the decision framework that prevents distributed monolith antipatterns.
+- [The Node.js Event Loop: What You Actually Need to Know](https://prathameshbelvalkar.in/blog/nodejs-event-loop-deep-dive): A practical, no-nonsense breakdown of the event loop, the phases that matter for backend developers, and how blocking it destroys your API's throughput.
+- [PostgreSQL Query Optimization in Practice](https://prathameshbelvalkar.in/blog/postgresql-query-optimization): EXPLAIN ANALYZE, index strategies, and the query patterns that actually kill database performance — lessons from profiling real production systems.
+- [React Performance Patterns That Actually Matter](https://prathameshbelvalkar.in/blog/react-performance-patterns): Cutting through the noise — the React performance techniques that move the needle in real apps, and the ones that are mostly cargo cult.
+- [TypeScript Patterns That Eliminate Runtime Bugs](https://prathameshbelvalkar.in/blog/typescript-advanced-patterns): Advanced TypeScript techniques I use daily — discriminated unions, branded types, and template literals — that catch entire classes of bugs at compile time.

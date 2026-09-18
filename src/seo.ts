@@ -10,7 +10,10 @@ function getSiteUrl() {
   const configured = import.meta.env.VITE_SITE_URL as string | undefined;
   const trimmed = configured?.trim();
   if (trimmed) return trimmed.replace(/\/+$/, '');
-  return window.location.origin.replace(/\/+$/, '');
+  if (typeof window !== 'undefined') {
+    return window.location.origin.replace(/\/+$/, '');
+  }
+  return 'https://prathameshbelvalkar.in';
 }
 
 function upsertMeta(kind: MetaKind, key: string, content: string) {
@@ -62,17 +65,80 @@ function setArticleTags(tags: string[]) {
   }
 }
 
+
+function buildPersonGraph(siteUrl: string) {
+  const name = portfolioData.person.name;
+  const description = portfolioData.siteDescription;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: `${siteUrl}/`,
+        name,
+        description,
+        publisher: { '@id': `${siteUrl}/#person` },
+        inLanguage: 'en',
+      },
+      {
+        '@type': 'ProfilePage',
+        '@id': `${siteUrl}/#profilepage`,
+        url: `${siteUrl}/`,
+        name: `${name} | Solution Architect`,
+        isPartOf: { '@id': `${siteUrl}/#website` },
+        mainEntity: { '@id': `${siteUrl}/#person` },
+      },
+      {
+        '@type': 'Person',
+        '@id': `${siteUrl}/#person`,
+        name,
+        url: `${siteUrl}/`,
+        image: `${siteUrl}/meta_image.png`,
+        jobTitle: 'Solution Architect',
+        description,
+        email: `mailto:${portfolioData.aboutProfile.email}`,
+        worksFor: {
+          '@type': 'Organization',
+          name: 'Airrived AI',
+        },
+        alumniOf: [
+          { '@type': 'CollegeOrUniversity', name: "KIT's IMER, Kolhapur" },
+          { '@type': 'CollegeOrUniversity', name: 'The New College, Kolhapur' },
+        ],
+        knowsLanguage: ['en', 'hi', 'mr', 'ja'],
+        sameAs: [
+          portfolioData.aboutProfile.linkedinHref,
+          'https://github.com/prathameshbelvalkar',
+        ],
+      },
+    ],
+  };
+}
+
+function buildBreadcrumbList(siteUrl: string, items: { name: string; path: string }[]) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `${siteUrl}${item.path}`,
+    })),
+  };
+}
+
 export function applyDefaultSeo() {
   removeArticleMeta();
   removeDynamicJsonLd();
   const siteUrl = getSiteUrl();
-  const title = `${portfolioData.person.name} | Full Stack Developer`;
-  const description = portfolioData.hero.intro;
+  const title = `${portfolioData.person.name} | Solution Architect`;
+  const description = portfolioData.siteDescription;
   const ogImage = `${siteUrl}/meta_image.png`;
 
   document.title = title;
   upsertMeta('name', 'description', description);
-  upsertMeta('name', 'keywords', 'full stack developer, backend engineer, React, Node.js, NestJS, Python, FastAPI, portfolio');
+  upsertMeta('name', 'keywords', 'solution architect, backend engineer, React, Node.js, NestJS, Python, FastAPI, portfolio');
 
   upsertLink('canonical', `${siteUrl}/`);
 
@@ -87,6 +153,8 @@ export function applyDefaultSeo() {
   upsertMeta('name', 'twitter:title', title);
   upsertMeta('name', 'twitter:description', description);
   upsertMeta('name', 'twitter:image', ogImage);
+
+  upsertDynamicJsonLd(buildPersonGraph(siteUrl));
 }
 
 export function applyProjectSeo(project: Project | null) {
@@ -153,15 +221,23 @@ export function applyBlogListingSeo() {
 
   upsertDynamicJsonLd({
     '@context': 'https://schema.org',
-    '@type': 'Blog',
-    name: title,
-    description: blogListingDescription,
-    url: pageUrl,
-    author: {
-      '@type': 'Person',
-      name: portfolioData.person.name,
-      url: `${siteUrl}/`,
-    },
+    '@graph': [
+      {
+        '@type': 'Blog',
+        name: title,
+        description: blogListingDescription,
+        url: pageUrl,
+        author: {
+          '@type': 'Person',
+          name: portfolioData.person.name,
+          url: `${siteUrl}/`,
+        },
+      },
+      buildBreadcrumbList(siteUrl, [
+        { name: 'Home', path: '/' },
+        { name: 'Blog', path: '/blog' },
+      ]),
+    ],
   });
 }
 
@@ -198,20 +274,29 @@ export function applyBlogPostSeo(post: BlogPost) {
 
   upsertDynamicJsonLd({
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt,
-    datePublished: published,
-    author: {
-      '@type': 'Person',
-      name: portfolioData.person.name,
-      url: `${siteUrl}/`,
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': pageUrl,
-    },
-    keywords: post.tags.join(', '),
-    articleSection: post.category,
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.excerpt,
+        datePublished: published,
+        author: {
+          '@type': 'Person',
+          name: portfolioData.person.name,
+          url: `${siteUrl}/`,
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': pageUrl,
+        },
+        keywords: post.tags.join(', '),
+        articleSection: post.category,
+      },
+      buildBreadcrumbList(siteUrl, [
+        { name: 'Home', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: post.title, path: path },
+      ]),
+    ],
   });
 }

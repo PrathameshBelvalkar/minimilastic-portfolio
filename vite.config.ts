@@ -48,9 +48,34 @@ export default defineConfig(({mode}) => {
           const files = fs.readdirSync(postsDir).filter((f) => f.endsWith('.mdx'));
           const slugs = [...new Set(files.map((f) => f.replace(/\.mdx$/, '')))].sort();
           type UrlRow = {loc: string; lastmod?: string; priority: string; changefreq: string};
+          const postDates: string[] = [];
+          for (const slug of slugs) {
+            const fp = path.join(postsDir, `${slug}.mdx`);
+            try {
+              const raw = fs.readFileSync(fp, 'utf8');
+              const m = raw.match(/^date:\s*"([^"]+)"/m);
+              if (m) postDates.push(m[1]);
+            } catch {
+              /* ignore */
+            }
+          }
+          const latestPostDate =
+            postDates.length > 0
+              ? [...postDates].sort().at(-1)
+              : new Date().toISOString().slice(0, 10);
           const urls: UrlRow[] = [
-            {loc: `${siteUrl}/`, priority: '1.0', changefreq: 'weekly'},
-            {loc: `${siteUrl}/blog`, priority: '0.9', changefreq: 'weekly'},
+            {
+              loc: `${siteUrl}/`,
+              lastmod: latestPostDate,
+              priority: '1.0',
+              changefreq: 'weekly',
+            },
+            {
+              loc: `${siteUrl}/blog`,
+              lastmod: latestPostDate,
+              priority: '0.9',
+              changefreq: 'weekly',
+            },
           ];
           for (const slug of slugs) {
             const fp = path.join(postsDir, `${slug}.mdx`);
