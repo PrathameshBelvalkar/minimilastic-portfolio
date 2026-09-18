@@ -68,7 +68,7 @@ export const portfolioData = {
     { code: 'JP', flag: 'JP', label: 'Japanese' },
     // { code: 'MR', flag: 'IN', label: 'Marathi' },
   ] satisfies Language[],
-  navItems: ['About', 'Capabilities', 'Experience', 'Projects', 'Contact', 'Blog'] satisfies string[],
+  navItems: ['About', 'Capabilities', 'Experience', /* 'Projects', */ 'Contact', 'Blog'] satisfies string[],
   projects: [
     {
       title: 'Stream Deck',
@@ -110,13 +110,32 @@ export const portfolioData = {
   capabilities: [
     {
       category: 'AI & Python Development',
-      desc: 'Building intelligent software solutions and AI-powered applications with Python.',
-      items: ['Python', 'AI Integration', 'WebRTC', 'WebSocket / RTMP', 'REST APIs'],
+      desc: 'Building intelligent software solutions and AI-powered applications with Python, including solution architecture, C4 and data-flow diagrams, and architecture decisions.',
+      items: [
+        'Solution Architecture',
+        'C4 / Data-flow Diagrams',
+        'Architecture Decision Records',
+        'Python',
+        'AI Integration',
+        'WebRTC',
+        'WebSocket / RTMP',
+        'REST APIs',
+      ],
     },
     {
       category: 'Backend Engineering',
-      desc: 'Building performant, scalable backend systems and secure RESTful APIs with 2.5+ years of experience.',
-      items: ['FastAPI', 'Django', 'SQLAlchemy', 'Celery', 'JWT / RBAC'],
+      desc: 'Building performant, scalable backend systems and secure RESTful APIs, with design reviews, technical documentation, and effort estimation.',
+      items: [
+        'FastAPI',
+        'Django',
+        'SQLAlchemy',
+        'Celery',
+        'JWT / RBAC',
+        'Design Reviews',
+        'Technical Documentation',
+        'Effort & Cost Estimation',
+        'Technology Evaluation',
+      ],
     },
     {
       category: 'Frontend & Database',
