@@ -187,7 +187,7 @@ export function applyProjectSeo(project: Project | null) {
 }
 
 const blogListingDescription =
-  'Articles on full stack development, backend systems, TypeScript, Node.js, and engineering practices.';
+  'Articles on solution architecture, ADRs, C4 diagrams, AI backends, NestJS, TypeScript, and engineering practices.';
 
 export function applyBlogListingSeo() {
   removeArticleMeta();
@@ -202,7 +202,7 @@ export function applyBlogListingSeo() {
   upsertMeta(
     'name',
     'keywords',
-    'developer blog, full stack, backend, TypeScript, React, Node.js, engineering'
+    'solution architecture, ADR, C4, AI backends, developer blog, NestJS, TypeScript, React, Node.js, engineering'
   );
 
   upsertLink('canonical', pageUrl);
