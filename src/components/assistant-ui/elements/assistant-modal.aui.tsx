@@ -1,5 +1,6 @@
 "use client";
 
+import { BorderBeam } from "border-beam";
 import { BotIcon, ChevronDownIcon, HistoryIcon, PlusIcon } from "lucide-react";
 
 import {
@@ -21,6 +22,7 @@ import {
   useAuiEvent,
   useAuiState,
 } from "@assistant-ui/react";
+import { useTheme } from "@/src/context/ThemeContext";
 
 import { Thread } from "@/src/components/assistant-ui/elements/thread.aui";
 import {
@@ -349,27 +351,36 @@ const AssistantModalButton = forwardRef<
   AssistantModalButtonProps
 >(({ "data-state": state, ...rest }, ref) => {
   const tooltip = state === "open" ? "Close" : "Ask about this post";
+  const { theme } = useTheme();
 
   return (
-    <TooltipIconButton
-      variant="ghost"
-      tooltip={tooltip}
-      side="left"
-      {...rest}
-      className="aui-modal-button bg-background text-foreground border-border/60 hover:border-border hover:bg-background size-full rounded-full border transition-[border-color,scale] duration-150 ease-out active:scale-96 motion-reduce:transition-none"
-      ref={ref}
+    <BorderBeam
+      size="sm"
+      colorVariant="colorful"
+      strength={0.7}
+      theme={theme === "light" ? "light" : "dark"}
+      className="size-full"
     >
-      <BotIcon
-        data-state={state}
-        className="aui-modal-button-closed-icon absolute size-5 transition-[scale,opacity,filter] duration-200 ease-[cubic-bezier(0.2,0,0,1)] data-[state=closed]:scale-100 data-[state=closed]:opacity-100 data-[state=closed]:blur-[0px] data-[state=open]:scale-25 data-[state=open]:opacity-0 data-[state=open]:blur-[4px] motion-reduce:transition-none"
-      />
+      <TooltipIconButton
+        variant="ghost"
+        tooltip={tooltip}
+        side="left"
+        {...rest}
+        className="aui-modal-button bg-background text-foreground border-border/60 hover:border-border hover:bg-background size-full rounded-full border transition-[border-color,scale] duration-150 ease-out active:scale-96 motion-reduce:transition-none"
+        ref={ref}
+      >
+        <BotIcon
+          data-state={state}
+          className="aui-modal-button-closed-icon absolute size-5 transition-[scale,opacity,filter] duration-200 ease-[cubic-bezier(0.2,0,0,1)] data-[state=closed]:scale-100 data-[state=closed]:opacity-100 data-[state=closed]:blur-[0px] data-[state=open]:scale-25 data-[state=open]:opacity-0 data-[state=open]:blur-[4px] motion-reduce:transition-none"
+        />
 
-      <ChevronDownIcon
-        data-state={state}
-        className="aui-modal-button-open-icon absolute size-5 transition-[scale,opacity,filter] duration-200 ease-[cubic-bezier(0.2,0,0,1)] data-[state=closed]:scale-25 data-[state=closed]:opacity-0 data-[state=closed]:blur-[4px] data-[state=open]:scale-100 data-[state=open]:opacity-100 data-[state=open]:blur-[0px] motion-reduce:transition-none"
-      />
-      <span className="aui-sr-only sr-only">{tooltip}</span>
-    </TooltipIconButton>
+        <ChevronDownIcon
+          data-state={state}
+          className="aui-modal-button-open-icon absolute size-5 transition-[scale,opacity,filter] duration-200 ease-[cubic-bezier(0.2,0,0,1)] data-[state=closed]:scale-25 data-[state=closed]:opacity-0 data-[state=closed]:blur-[4px] data-[state=open]:scale-100 data-[state=open]:opacity-100 data-[state=open]:blur-[0px] motion-reduce:transition-none"
+        />
+        <span className="aui-sr-only sr-only">{tooltip}</span>
+      </TooltipIconButton>
+    </BorderBeam>
   );
 });
 
