@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import Readingman from '../components/illustrations/Readingman';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo } from 'react';
@@ -6,9 +6,17 @@ import { useSearchParams } from 'react-router';
 import { blogCategories, blogPosts } from '../blog';
 import { BlogCard } from '../components/blog/BlogCard';
 import { TrendingBlogCarousel } from '../components/blog/TrendingBlogCarousel';
+import { Button } from '@/src/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/src/components/ui/dropdown-menu';
 import { applyBlogListingSeo } from '../seo';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE_OPTIONS = [3, 6, 9, 12] as const;
+const DEFAULT_PAGE_SIZE = 3;
 
 export default function BlogPage() {
   useEffect(() => {
@@ -19,12 +27,16 @@ export default function BlogPage() {
   const searchQuery = searchParams.get('q') ?? '';
   const activeCategory = searchParams.get('cat') ?? 'All';
   const currentPage = Math.max(1, Number(searchParams.get('page') ?? '1'));
+  const requestedSize = Number(searchParams.get('size') ?? DEFAULT_PAGE_SIZE);
+  const pageSize = PAGE_SIZE_OPTIONS.includes(requestedSize as (typeof PAGE_SIZE_OPTIONS)[number])
+    ? requestedSize
+    : DEFAULT_PAGE_SIZE;
 
   function setParam(updates: Record<string, string>) {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       Object.entries(updates).forEach(([k, v]) => {
-        if (v === '' || v === 'All' || v === '1') next.delete(k);
+        if (v === '' || v === 'All' || v === '1' || (k === 'size' && v === String(DEFAULT_PAGE_SIZE))) next.delete(k);
         else next.set(k, v);
       });
       return next;
@@ -50,11 +62,12 @@ export default function BlogPage() {
     });
   }, [searchQuery, activeCategory]);
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(currentPage, totalPages);
 
   const paginated = useMemo(
-    () => filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
-    [filtered, currentPage],
+    () => filtered.slice((safePage - 1) * pageSize, safePage * pageSize),
+    [filtered, safePage, pageSize],
   );
 
   return (
@@ -124,16 +137,37 @@ export default function BlogPage() {
                 {cat}
               </button>
             ))}
-            <span className="ml-auto font-mono text-[10px] opacity-30 uppercase tracking-widest">
-              {filtered.length} / {blogPosts.length}
-            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  aria-label="Posts per page"
+                  className="ml-auto border-theme bg-[var(--color-bg)] text-[var(--color-text)] shadow-none hover:bg-[var(--color-card-bg)] hover:border-[var(--color-text-muted)] hover:text-[var(--color-text)] focus-visible:border-[var(--color-text-muted)] focus-visible:ring-0"
+                >
+                  Show {pageSize}
+                  <ChevronDown className="size-4 opacity-60" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="border-theme bg-[var(--color-bg)] text-[var(--color-text)]">
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <DropdownMenuItem
+                    key={size}
+                    onSelect={() => resetPage({ size: String(size) })}
+                    className="focus:bg-[var(--color-card-bg)] focus:text-[var(--color-text)]"
+                  >
+                    {size} posts
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
         <AnimatePresence mode="wait">
           {filtered.length > 0 ? (
             <motion.div
-              key={`${activeCategory}-${searchQuery}-${currentPage}`}
+              key={`${activeCategory}-${searchQuery}-${safePage}-${pageSize}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -149,8 +183,8 @@ export default function BlogPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 pt-4 ">
                   <button
-                    onClick={() => setParam({ page: String(Math.max(1, currentPage - 1)) })}
-                    disabled={currentPage === 1}
+                    onClick={() => setParam({ page: String(Math.max(1, safePage - 1)) })}
+                    disabled={safePage === 1}
                     className="p-2 rounded-lg border border-theme disabled:opacity-20 hover:border-[var(--color-text-muted)] transition-all duration-200 disabled:cursor-not-allowed"
                     aria-label="Previous page"
                   >
@@ -162,7 +196,7 @@ export default function BlogPage() {
                       key={page}
                       onClick={() => setParam({ page: String(page) })}
                       className={`w-8 h-8 rounded-lg text-[10px] font-bold uppercase tracking-widest border transition-all duration-200 ${
-                        page === currentPage
+                        page === safePage
                           ? 'border-[var(--color-text)] bg-[var(--color-text)] text-[var(--color-bg)]'
                           : 'border-theme opacity-50 hover:opacity-100 hover:border-[var(--color-text-muted)]'
                       }`}
@@ -172,8 +206,8 @@ export default function BlogPage() {
                   ))}
 
                   <button
-                    onClick={() => setParam({ page: String(Math.min(totalPages, currentPage + 1)) })}
-                    disabled={currentPage === totalPages}
+                    onClick={() => setParam({ page: String(Math.min(totalPages, safePage + 1)) })}
+                    disabled={safePage === totalPages}
                     className="p-2 rounded-lg border border-theme disabled:opacity-20 hover:border-[var(--color-text-muted)] transition-all duration-200 disabled:cursor-not-allowed"
                     aria-label="Next page"
                   >
@@ -181,7 +215,7 @@ export default function BlogPage() {
                   </button>
 
                   <span className="ml-2 font-mono text-[10px] opacity-30 uppercase tracking-widest">
-                    {currentPage} / {totalPages}
+                    {safePage} / {totalPages}
                   </span>
                 </div>
               )}
