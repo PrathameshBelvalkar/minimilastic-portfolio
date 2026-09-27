@@ -45,6 +45,14 @@ function applyMermaidTheme(expanded: boolean) {
   });
 }
 
+function fitSvg(svgEl: SVGSVGElement) {
+  const naturalWidth = svgEl.viewBox.baseVal.width;
+  svgEl.removeAttribute('height');
+  svgEl.style.width = '100%';
+  svgEl.style.maxWidth = naturalWidth ? `${naturalWidth}px` : '100%';
+  svgEl.style.height = 'auto';
+}
+
 export function MermaidDiagram({ code }: { code: string }) {
   const id = useRef(`mermaid-${++counter}`).current;
   const ref = useRef<HTMLDivElement>(null);
@@ -65,12 +73,7 @@ export function MermaidDiagram({ code }: { code: string }) {
         if (!ref.current) return;
         ref.current.innerHTML = svg;
         const svgEl = ref.current.querySelector('svg');
-        if (svgEl) {
-          svgEl.style.maxWidth = '100%';
-          svgEl.style.height = 'auto';
-          svgEl.removeAttribute('width');
-          svgEl.style.overflow = 'visible';
-        }
+        if (svgEl) fitSvg(svgEl);
       })
       .catch(() => setError('true'));
   }, [code, id]);
@@ -104,12 +107,7 @@ export function MermaidDiagram({ code }: { code: string }) {
         if (!expandedRef.current) return;
         expandedRef.current.innerHTML = svg;
         const svgEl = expandedRef.current.querySelector('svg');
-        if (svgEl) {
-          svgEl.style.maxWidth = '100%';
-          svgEl.style.height = 'auto';
-          svgEl.removeAttribute('width');
-          svgEl.style.overflow = 'visible';
-        }
+        if (svgEl) fitSvg(svgEl);
       })
       .catch(() => {
         if (expandedRef.current) expandedRef.current.textContent = 'Could not render diagram.';
