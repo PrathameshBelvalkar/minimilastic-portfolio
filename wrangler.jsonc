@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Must match the Worker/project name in the Cloudflare dashboard
+  "name": "minimilastic-portfolio",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // Unknown routes fall back to index.html so client-side routing works
+    "not_found_handling": "single-page-application"
+  }
+}
